@@ -26,6 +26,8 @@ public class DetectionSystem : ModuleRules
 			new string[]
 			{
 				"Core",
+                "AIModule",
+                "UMG",
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);
@@ -38,6 +40,8 @@ public class DetectionSystem : ModuleRules
 				"Engine",
 				"Slate",
 				"SlateCore",
+                "AIModule",
+                "UMG",
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);
