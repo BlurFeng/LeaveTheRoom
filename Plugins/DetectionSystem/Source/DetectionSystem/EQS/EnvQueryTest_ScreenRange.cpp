@@ -25,7 +25,7 @@ UEnvQueryTest_ScreenRange::UEnvQueryTest_ScreenRange(const FObjectInitializer& O
 
 void UEnvQueryTest_ScreenRange::RunTest(FEnvQueryInstance& QueryInstance) const
 {
-	bool isServer = UKismetSystemLibrary::IsServer(this);
+	bool isServer = UKismetSystemLibrary::IsDedicatedServer(this);
 
 	UObject* QueryOwner = QueryInstance.Owner.Get();
 	if (QueryOwner == nullptr) return;
@@ -171,9 +171,10 @@ void UEnvQueryTest_ScreenRange::RunTest(FEnvQueryInstance& QueryInstance) const
 				//Debug绘制目标点
 				if (bDebugDraw)
 				{
-					if (score_Dis >= -0.2)//绘制一定范围内的目标点，包括不在有效范围内的
+					//绘制自身到目前一些可能目标点的连线，有效范围内时从红色变为绿色
+					if (score_Dis >= -0.2)
 					{
-						DrawDebugLine(GetWorld(), ContextLocations[0], itemBox.GetClosestPointTo(ContextLocations[0]), pass_Dis ? FColor::Green : FColor::Red, false, 0.1f, 0.f, 0.1f);
+						DrawDebugLine(GetWorld(), ContextLocations[0], itemBox.GetClosestPointTo(ContextLocations[0]), pass_Dis ? FColor::Green : FColor::Red, false, 0.1f, 0.f, 0.2f);
 
 						drawDebugBoxInfos.Add(FDrawDebugBoxInfo(ItemActor, itemBox.GetCenter(), itemBox.GetExtent(), FColor::White));
 					}
@@ -436,7 +437,7 @@ void UEnvQueryTest_ScreenRange::RunTest(FEnvQueryInstance& QueryInstance) const
 
 				//绘制射线
 				//DrawDebugLine(GetWorld(), originPosWorldLocation, traceEnd, traceColor, false, 0.1f, 0, 0.18f);
-				DrawDebugDirectionalArrow(GetWorld(), originPosWorldLocation, traceEnd, 2.f, traceColor, false, 0.1f, 0, 0.007f);
+				DrawDebugDirectionalArrow(GetWorld(), originPosWorldLocation, traceEnd, 2.f, traceColor, false, 0.1f, 0, 0.1f);
 			}
 #endif
 

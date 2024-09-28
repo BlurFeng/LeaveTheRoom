@@ -285,9 +285,9 @@ void UDetectionSystemComponentBase::RefreshContinuousDetection()
 		if (detectionContainer->GetTarget(targetActor))
 		{
 			//确认是否是最佳目标
-			FDetectionObjectInfo outDetectionObjectInfo;
+			FDetectionObjectInfo detectionObjectInfo = FDetectionObjectInfo(targetActor, detectionContainer->DetectionContainerID, detectionContainer->DetectionConditionItem.Priority);
 			bool isBestTargetByWeightScore, isBestTargetByPriority;
-			CheckBestTarget(detectionContainer, outDetectionObjectInfo, isBestTargetByWeightScore, isBestTargetByPriority);
+			CheckBestTarget(detectionContainer, detectionObjectInfo, isBestTargetByWeightScore, isBestTargetByPriority);
 
 			HaveTargetDetectionContainers.Add(detectionContainer);
 		}

@@ -17,7 +17,7 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FMDDetectionAction);
 
 /*探测容器，和探测条件配置条目对应，用于存储探测条件配置，对目标进行筛选并存储*/
-UCLASS(Blueprintable, ClassGroup = (DetectionSystem))
+UCLASS(ClassGroup = (DetectionSystem))
 class DETECTIONSYSTEM_API UDetectionContainer : public UObject
 {
 	GENERATED_BODY()
@@ -254,7 +254,7 @@ private:
 
 	/*是否拥有最佳目标 通过优先级(越小优先级越高，优先级相同时判断DetectionContainerID探测条件列表中的下标*/
 	UPROPERTY()
-		bool IsHaveBestTargetByPriority;
+		bool IsHaveBestTargetByPriority = false;
 
 	/*最佳目标 通过优先级(越小优先级越高，优先级相同时判断探测条件列表中的下标*/
 	UPROPERTY()
