@@ -168,14 +168,14 @@ void UEnvQueryTest_ScreenRange::RunTest(FEnvQueryInstance& QueryInstance) const
 				pass_Dis = score_Dis > 0;
 
 #if !UE_BUILD_SHIPPING
-				//Debug绘制目标点
+				//绘制较近距离里可能的目标
 				if (bDebugDraw)
 				{
-					//绘制自身到目前一些可能目标点的连线，有效范围内时从红色变为绿色
-					if (score_Dis >= -0.2)
+					if (score_Dis >= -0.5f)
 					{
+						//绘制自身到目前一些可能目标点的连线，有效范围内时从红色变为绿色
 						DrawDebugLine(GetWorld(), ContextLocations[0], itemBox.GetClosestPointTo(ContextLocations[0]), pass_Dis ? FColor::Green : FColor::Red, false, 0.1f, 0.f, 0.2f);
-
+						//绘制目标box用信息添加，未通过距离测试为白色
 						drawDebugBoxInfos.Add(FDrawDebugBoxInfo(ItemActor, itemBox.GetCenter(), itemBox.GetExtent(), FColor::White));
 					}
 				}
@@ -200,7 +200,7 @@ void UEnvQueryTest_ScreenRange::RunTest(FEnvQueryInstance& QueryInstance) const
 			itemBoxCenter = itemBox.GetCenter();
 
 			//获取包围盒上距离探测原点方向射线距离最近的点，作为目标点位置
-			itemLocation = GetBoxClosestPointToLine2(itemBox, originPosWorldLocation, originPosWorldDir, isIntersection);
+			itemLocation = GetBoxClosestPointWithLine2(itemBox, originPosWorldLocation, originPosWorldDir, isIntersection);
 			getItemLocationSucceed = true;
 		}
 
@@ -228,12 +228,13 @@ void UEnvQueryTest_ScreenRange::RunTest(FEnvQueryInstance& QueryInstance) const
 		}
 
 #if !UE_BUILD_SHIPPING
-		//Debug绘制目标点
+		//Debug绘制目标
 		if (bDebugDraw)
 		{
 			if (!isServer && detectionSystemDebugHUD && UKismetSystemLibrary::IsValid(detectionSystemDebugHUD))
 				detectionSystemDebugHUD->SetDrawEQTScreenRange_ItemPoint(itemPos, pass_ScreenRange ? FLinearColor::Green : FLinearColor::Red);
 
+			//绘制目标box用信息更新，通过距离测试为蓝色
 			drawDebugBoxInfos[drawDebugBoxInfos.Num() - 1] = FDrawDebugBoxInfo(ItemActor, itemBox.GetCenter(), itemBox.GetExtent(), FColor::Blue);
 		}
 #endif
@@ -357,8 +358,9 @@ void UEnvQueryTest_ScreenRange::RunTest(FEnvQueryInstance& QueryInstance) const
 						traceTendencyPosWorldLocation, traceTendencyPosWorldDir);
 
 					bool traceTendencyIsIntersection;
-					traceEnd = GetBoxClosestPointToLine2(itemBox, traceTendencyPosWorldLocation, traceTendencyPosWorldDir, traceTendencyIsIntersection);
+					traceEnd = GetBoxClosestPointWithLine2(itemBox, traceTendencyPosWorldLocation, traceTendencyPosWorldDir, traceTendencyIsIntersection);
 
+					//注意，因为射线结束点距离是恰好到包围盒上的距离，有时会刚好没有击打到目标。但这对测试是否有阻挡物体功能没有影响，我们这里不在对射线进行延长
 					bHit = World->LineTraceSingleByChannel(
 						hitResaule,
 						originPosWorldLocation,
@@ -424,7 +426,7 @@ void UEnvQueryTest_ScreenRange::RunTest(FEnvQueryInstance& QueryInstance) const
 					{
 						for (int i = 0; i < drawDebugBoxInfos.Num(); i++)
 						{
-							//被其他Item阻挡时，绘制黄色碰撞盒
+							//被其他Item阻挡时，绘制黄色包围盒
 							if (drawDebugBoxInfos[i].TargetActor == hitTarget)
 							{
 								index = i;
@@ -469,7 +471,7 @@ void UEnvQueryTest_ScreenRange::RunTest(FEnvQueryInstance& QueryInstance) const
 		for (int i = 0; i < drawDebugBoxInfos.Num(); i++)
 		{
 			FDrawDebugBoxInfo info = drawDebugBoxInfos[i];
-
+			//绘制目标包围盒
 			DrawDebugBox(GetWorld(), info.Center, info.Extent, info.Color, false, 0.1f);
 		}
 	}
@@ -607,25 +609,26 @@ FVector UEnvQueryTest_ScreenRange::ClosestPointOnInfiniteLine(const FVector& Lin
 	return ClosestPoint;
 }
 
-FVector UEnvQueryTest_ScreenRange::GetBoxClosestPointToLine1(const FBox& Box, const FVector& Start, const FVector& Dir) const
+FVector UEnvQueryTest_ScreenRange::GetBoxClosestPointWithLine1(const FBox& Box, const FVector& Start, const FVector& Dir) const
 {
 	//粗略计算，当目标和Dir相同方向的长度过长时会导致实际可探测体积小于Box
 	FVector cameraForwardLineClosestPoint = ClosestPointOnInfiniteLine(Start, Dir, Box.GetCenter());
 	return Box.GetClosestPointTo(cameraForwardLineClosestPoint);
 }
 
-FVector UEnvQueryTest_ScreenRange::GetBoxClosestPointToLine2(const FBox& Box, const FVector& Start, const FVector& Dir, bool& IsIntersection) const
+FVector UEnvQueryTest_ScreenRange::GetBoxClosestPointWithLine2(const FBox& Box, const FVector& Start, const FVector& Dir, bool& IsIntersection) const
 {
 	//计算线段结束点
 	float length = (Start - Box.GetCenter()).Size() + Box.GetSize().Size();
 	FVector End = Start + Dir * length;
 
-	//线段与Box交叉时，返回交叉点
+	//--线段与Box交叉时，返回交叉点
 	FVector HitLocation; FVector HitNormal; float HitTime;
 	IsIntersection = FMath::LineExtentBoxIntersection(Box, Start, End, FVector::ZeroVector, HitLocation, HitNormal, HitTime);
 	if (IsIntersection)
 		return HitLocation;
 	
+	//--没有交叉时，计算距离射线最近的点
 	//Box八个角点
 	FVector point1 = Box.Min;
 	FVector point7 = Box.Max;

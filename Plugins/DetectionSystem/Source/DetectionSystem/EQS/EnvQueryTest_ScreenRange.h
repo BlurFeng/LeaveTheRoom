@@ -18,7 +18,7 @@ enum class EEnvTestScreenRangeOcclusionExamineMode : uint8
 	/*单射线检测*/
 	SingleTrace,
 
-	/*预测射线，在目标经常被障碍物遮挡时此模式将获得更好的体验。但会有更多的运算和内存开销。*/
+	/*预测射线，会有更多的运算和内存开销。在目标经常被障碍物遮挡时此模式将获得更好的体验，比如通过墙上的一个小洞对准对面的目标时。*/
 	ForecastTrace,
 };
 
@@ -137,7 +137,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = ScreenRange)
 		bool bIgnoreSelfPawn = true;
 
-	/*使用BoundingBox距离中心点最近的点作为目标点*/
+	/*使用BoundingBox距离中心点最近的点作为目标点，这在目标体积较大时，能对准目标体积边缘就获取目标。否则获取目标中心点作为目标点。*/
 	UPROPERTY(EditDefaultsOnly, Category = ScreenRange)
 		bool bUseBoundingBoxClosestPoint = true;
 
@@ -213,11 +213,11 @@ protected:
 
 	/*获取Box上距离射线最近的点，粗略获取方法*/
 	UFUNCTION()
-		FVector GetBoxClosestPointToLine1(const FBox& Box, const FVector& Start, const FVector& Dir) const;
+		FVector GetBoxClosestPointWithLine1(const FBox& Box, const FVector& Start, const FVector& Dir) const;
 
 	/*获取Box上距离射线最近的点，准确获取方法*/
 	UFUNCTION()
-		FVector GetBoxClosestPointToLine2(const FBox& Box, const FVector& Start, const FVector& Dir, bool& IsIntersection) const;
+		FVector GetBoxClosestPointWithLine2(const FBox& Box, const FVector& Start, const FVector& Dir, bool& IsIntersection) const;
 
 	UFUNCTION()
 		bool GetDetectionSystemWorldSubsystem(UDetectionSystemWorldSubsystem*& OutSubsystem) const;

@@ -83,11 +83,11 @@ public:
 
 protected:
 
-	/*在范围内的所有Actors*/
+	/*通过EQS测试的所有Actors*/
 	UPROPERTY(BlueprintReadOnly, Category = "DetectionSystem|DetectionContainer")
-		TArray<AActor*> InRangeActors;
+		TArray<AActor*> QueryResults;
 
-	/*筛选出的目标Actor数组*/
+	/*指定数量的有效目标Actor数组，从QueryResults中分数高的开始获取*/
 	UPROPERTY()
 		TArray<AActor*> TargetActors;
 

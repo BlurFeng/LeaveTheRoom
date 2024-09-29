@@ -381,17 +381,17 @@ void UDetectionContainer::OnDetection()
 
 	//获取所有探测到的目标
 	//Tips 实际上直接获取是获取不到此次运行EQS所获得的数据的 而是获取到之前运行完成后的缓存 因为时持续探测所以直接写在这没什么问题
-	EnvQueryInstance->GetQueryResultsAsActors(InRangeActors);
+	EnvQueryInstance->GetQueryResultsAsActors(QueryResults);
 	
 	//获取指定数量的目标
 	TargetActors.Empty();
-	if (InRangeActors.Num() > 0)
+	if (QueryResults.Num() > 0)
 	{
-		TargetActor = InRangeActors[0];
+		TargetActor = QueryResults[0];
 		for (int i = 0; i < DetectionConditionItem.DetectionCondition.Amount; i++)
 		{
-			if (!InRangeActors.IsValidIndex(i)) break;
-			TargetActors.Add(InRangeActors[i]);
+			if (!QueryResults.IsValidIndex(i)) break;
+			TargetActors.Add(QueryResults[i]);
 		}
 
 		IsHaveTargetObject = true;
@@ -426,7 +426,7 @@ void UDetectionContainer::ClearAllTarget()
 {
 	IsHaveTargetObject = false;
 
-	InRangeActors.Empty();
+	QueryResults.Empty();
 	TargetActors.Empty();
 	TargetActor = nullptr;
 }
