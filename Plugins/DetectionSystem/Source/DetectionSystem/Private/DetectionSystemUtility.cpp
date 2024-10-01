@@ -48,7 +48,7 @@ bool UDetectionSystemUtility::DetectionTarget(
 	//TargetActors.Empty();
 	//if (InRangeActors.Num() > 0)
 	//{
-	//	for (int i = 0; i < DetectionConditionItem.Amount; i++)
+	//	for (size_t i = 0; i < DetectionConditionItem.Amount; i++)
 	//	{
 	//		if (!InRangeActors.IsValidIndex(i)) break;
 	//		TargetActors.Add(InRangeActors[i]);
@@ -125,7 +125,7 @@ TArray<FVector> UDetectionSystemUtility::GetConeVertsInDegrees(FVector const& or
 	TArray<FVector> ConeVerts;
 	ConeVerts.AddUninitialized(NumSides);
 
-	for (int32 i = 0; i < NumSides; i++)
+	for (size_t i = 0; i < NumSides; i++)
 	{
 		const float Fraction = (float)i / (float)(NumSides);
 		const float Thi = 2.f * PI * Fraction;
