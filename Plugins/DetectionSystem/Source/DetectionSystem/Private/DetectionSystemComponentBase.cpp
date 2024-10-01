@@ -317,8 +317,13 @@ void UDetectionSystemComponentBase::CheckBestTarget(UDetectionContainer* detecti
 	}
 	else if (detectionObjectInfo.Priority == BestTargetByPriority.Priority)
 	{
+		//同一个探测容器，但目标可能变化了
+		if (detectionObjectInfo.DetectionContainerID == BestTargetByPriority.DetectionContainerID) 
+		{
+			BestTargetByPriority = detectionObjectInfo;
+		}
 		//当优先级相等时 确认权重分 和探测的下标ID
-		if (detectionObjectInfo.DetectionContainerID < BestTargetByPriority.DetectionContainerID)
+		else if (detectionObjectInfo.DetectionContainerID < BestTargetByPriority.DetectionContainerID)
 		{
 			BestTargetByPriority = detectionObjectInfo;
 			BestTargetByPriorityContainerInfo = FDetectionContainerInfo(detectionContainer->DetectionContainerID, detectionContainer->DetectionConditionItem.Priority);
