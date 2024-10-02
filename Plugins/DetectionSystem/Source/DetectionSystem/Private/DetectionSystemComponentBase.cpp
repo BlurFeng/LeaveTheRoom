@@ -273,6 +273,10 @@ void UDetectionSystemComponentBase::RefreshContinuousDetection()
 	if(OnContinuousDetectionStart.IsBound())
 		OnContinuousDetectionStart.Broadcast();
 
+	//重置最佳目标数据
+	IsHaveBestTargetByPriority = false;
+	BestTargetByPriority = FDetectionObjectInfo();
+
 	//遍历探测目标集合
 	for (auto& detectionContainer : DetectionContainers)
 	{

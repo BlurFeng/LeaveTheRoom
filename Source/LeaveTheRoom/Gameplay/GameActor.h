@@ -23,7 +23,6 @@ public:
 	AGameActor();
 
 protected:
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GameActor")
 	FGameplayTagContainer GameplayTagContainer;
 
