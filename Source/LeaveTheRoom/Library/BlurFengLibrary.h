@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -19,44 +19,44 @@ public:
 	//-------- Maths --------
 
 	/*
-	±È½ÏÁ½¸öÊıµÄ¾ø¶ÔÖµµÄ´óĞ¡ ²¢·µ»Ø
-	@return ¾ø¶ÔÖµ¸ü´óµÄÊıµÄÔ­Ê¼Öµ
+	æ¯”è¾ƒä¸¤ä¸ªæ•°çš„ç»å¯¹å€¼çš„å¤§å° å¹¶è¿”å›
+	@return ç»å¯¹å€¼æ›´å¤§çš„æ•°çš„åŸå§‹å€¼
 	*/
 	UFUNCTION(BlueprintPure, Category = "UBlurFengLibrary|Maths")
 	static float AbsMax(const float FloatA, const float FloatB);
 
 	/*
-	¸Ä±äÒ»¸öÊıÖµ ²¢ÏŞÖÆÔÚÒ»¶¨·¶Î§ÄÚ
-	@param value - ±»¸Ä±äµÄÊıµÄµ±Ç°Öµ
-	@param changValue - ±ä»¯Öµ
-	@param min - ×îĞ¡ÏŞÖÆÖµ
-	@param max - ×î´óÏŞÖÆÖµ
-	@param outValue - ¸Ä±äºóµÄÊı
-	@return ²Ù×÷µÄÊıÖµÊÇ·ñ·¢ÉúÁË±ä»¯
+	æ”¹å˜ä¸€ä¸ªæ•°å€¼ å¹¶é™åˆ¶åœ¨ä¸€å®šèŒƒå›´å†…
+	@param value - è¢«æ”¹å˜çš„æ•°çš„å½“å‰å€¼
+	@param changValue - å˜åŒ–å€¼
+	@param min - æœ€å°é™åˆ¶å€¼
+	@param max - æœ€å¤§é™åˆ¶å€¼
+	@param outValue - æ”¹å˜åçš„æ•°
+	@return æ“ä½œçš„æ•°å€¼æ˜¯å¦å‘ç”Ÿäº†å˜åŒ–
 	*/
 	UFUNCTION(BlueprintPure, Category = "UBlurFengLibrary|Maths")
 	static bool ChangeValueClame(const float Value, const float ChangValue, const float Min, const float Max, float& OutValue);
 
 	/**
-	 * »ñÈ¡Á½ÏòÁ¿Ö®¼ä¼Ğ½Ç
-	 * @param dir1 ÏòÁ¿1
-	 * @param dir2 ÏòÁ¿2
-	 * @return ¼Ğ½Ç
+	 * è·å–ä¸¤å‘é‡ä¹‹é—´å¤¹è§’
+	 * @param dir1 å‘é‡1
+	 * @param dir2 å‘é‡2
+	 * @return å¤¹è§’
 	*/
 	UFUNCTION(BlueprintPure, Category = "UBlurFengLibrary|Maths")
 	static float VectorAngle(const FVector Dir1, const FVector Dir2);
 
 	/**
-	 * ÏŞÖÆÏòÁ¿limitDirºÍÏòÁ¿targetDirµÄ¼Ğ½Ç ²¢·µ»ØcurrentDirĞŞ¸ÄÖ®ºóµÄÏòÁ¿
-	 * @param currentDir ÏŞÖÆÏòÁ¿
-	 * @param targetDir Ä¿±êÏòÁ¿
-	 * @param limitAngle ÏŞÖÆ½Ç¶È
-	 * @return ¸Ä±äºóµÄÏòÁ¿
+	 * é™åˆ¶å‘é‡limitDirå’Œå‘é‡targetDirçš„å¤¹è§’ å¹¶è¿”å›currentDirä¿®æ”¹ä¹‹åçš„å‘é‡
+	 * @param currentDir é™åˆ¶å‘é‡
+	 * @param targetDir ç›®æ ‡å‘é‡
+	 * @param limitAngle é™åˆ¶è§’åº¦
+	 * @return æ”¹å˜åçš„å‘é‡
 	*/
 	UFUNCTION(BlueprintPure, Category = "UBlurFengLibrary|Maths")
 	static FVector DirectionRotateLimit(const FVector CurrentDir, const FVector TargetDir, const float LimitAngle);
 
-	/*ÏŞÖÆVector3ÔÚÄ³¸ö·¶Î§ÄÚ*/
+	/*é™åˆ¶Vector3åœ¨æŸä¸ªèŒƒå›´å†…*/
 	UFUNCTION(BlueprintPure, Category = "UBlurFengLibrary|Maths")
 	static bool Vector3Limit(FVector InV, FVector MaxBounds, FVector MinBounds, FVector& OutV);
 

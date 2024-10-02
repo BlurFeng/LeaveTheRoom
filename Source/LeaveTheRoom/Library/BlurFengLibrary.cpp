@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "BlurFengLibrary.h"
@@ -118,26 +118,26 @@ bool UBlurFengLibrary::RandomNameWithout(const TArray<FName> Names, const FName 
 		return !WithoutName.IsEqual(OutName);
 	}
 
-	//»ñÈ¡Ò»¸öËæ»úÏÂ±êµÄName
+	//è·å–ä¸€ä¸ªéšæœºä¸‹æ ‡çš„Name
 	RandomName(Names, OutName, OutIndex);
 
-	//Èç¹û»ñÈ¡µÄNameºÍĞèÒªÅÅ³ıµÄWithoutNameÏàµÈ£¬ÄÇÃ´ÍùºóÒ»Î»È¡Name£¬Ö±µ½²»ÏàÍ¬»ò²éÑ¯ÁËÕû¸öÊı×é
+	//å¦‚æœè·å–çš„Nameå’Œéœ€è¦æ’é™¤çš„WithoutNameç›¸ç­‰ï¼Œé‚£ä¹ˆå¾€åä¸€ä½å–Nameï¼Œç›´åˆ°ä¸ç›¸åŒæˆ–æŸ¥è¯¢äº†æ•´ä¸ªæ•°ç»„
 	if (OutName.IsEqual(WithoutName))
 	{
 		int32 counter = 0;
 		for (size_t i = OutIndex; i < Names.Num(); i++)
 		{
-			//±éÀúÁËÊı×éµ«Ã»ÓĞÕÒµ½²»ÏàµÈµÄName
+			//éå†äº†æ•°ç»„ä½†æ²¡æœ‰æ‰¾åˆ°ä¸ç›¸ç­‰çš„Name
 			if (counter == Names.Num()) return false;
 
-			//Èç¹ûName²»ÏàµÈ£¬·µ»ØÕâ¸öName
+			//å¦‚æœNameä¸ç›¸ç­‰ï¼Œè¿”å›è¿™ä¸ªName
 			if (!Names[i].IsEqual(WithoutName))
 			{
 				OutName = Names[i];
 				break;
 			}
 
-			//Ñ­»·µ½Êı×é×îºó£¬ÔÙ´Ó0¿ªÊ¼
+			//å¾ªç¯åˆ°æ•°ç»„æœ€åï¼Œå†ä»0å¼€å§‹
 			if (i == Names.Num() - 1) i = 0;
 			counter++;
 		}

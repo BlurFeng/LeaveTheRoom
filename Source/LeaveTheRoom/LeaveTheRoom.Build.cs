@@ -16,12 +16,14 @@ public class LeaveTheRoom : ModuleRules
 				"Engine", 
 				"InputCore",
                 "DetectionSystem",
+                "GameplayTags",
             });
 
 		PrivateDependencyModuleNames.AddRange(
 			new string[] 
 			{
                 "DetectionSystem",
+                "GameplayTags",
             });
 
 		// Uncomment if you are using Slate UI
