@@ -91,31 +91,31 @@ bool UDetectionSystemComponentBase::Init_Implementation(
 	return true;
 }
 
-bool UDetectionSystemComponentBase::GetBestTarget(AActor*& outDetectionActor, FDetectionContainerInfo& outContainerInfo)
+bool UDetectionSystemComponentBase::GetBestTarget(AActor*& outDetectionActor, FDetectionContainerData& outContainerData)
 {
-	if (GetBestTargetByPriority(outDetectionActor, outContainerInfo))
+	if (GetBestTargetByPriority(outDetectionActor, outContainerData))
 		return true;
 
 	return false;
 }
 
-bool UDetectionSystemComponentBase::GetBestTargetByPriority(AActor*& outDetectionActor, FDetectionContainerInfo& outContainerInfo)
+bool UDetectionSystemComponentBase::GetBestTargetByPriority(AActor*& outDetectionActor, FDetectionContainerData& outContainerData)
 {
 	if (IsHaveBestTargetByPriority)
 	{
 		outDetectionActor = BestTargetByPriority.Actor;
-		outContainerInfo = BestTargetByPriorityContainerInfo;
+		outContainerData = BestTargetByPriorityContainerData;
 		return true;
 	}
 
 	return false;
 }
 
-bool UDetectionSystemComponentBase::GetTarget(int detectionContainerIndex, AActor*& outDetectionActor, FDetectionContainerInfo& outContainerInfo)
+bool UDetectionSystemComponentBase::GetTarget(int detectionContainerIndex, AActor*& outDetectionActor, FDetectionContainerData& outContainerData)
 {
 	if (!DetectionContainers.IsValidIndex(detectionContainerIndex)) return false;
 
-	outContainerInfo = FDetectionContainerInfo(
+	outContainerData = FDetectionContainerData(
 		DetectionContainers[detectionContainerIndex]->DetectionContainerID, 
 		DetectionContainers[detectionContainerIndex]->DetectionConditionItem.Priority
 	);
@@ -123,11 +123,11 @@ bool UDetectionSystemComponentBase::GetTarget(int detectionContainerIndex, AActo
 	return DetectionContainers[detectionContainerIndex]->GetTarget(outDetectionActor);
 }
 
-bool UDetectionSystemComponentBase::GetTargets(int detectionContainerIndex, TArray<AActor*>& outDetectionActors, FDetectionContainerInfo& outContainerInfo)
+bool UDetectionSystemComponentBase::GetTargets(int detectionContainerIndex, TArray<AActor*>& outDetectionActors, FDetectionContainerData& outContainerData)
 {
 	if (!DetectionContainers.IsValidIndex(detectionContainerIndex)) return false;
 
-	outContainerInfo = FDetectionContainerInfo(
+	outContainerData = FDetectionContainerData(
 		DetectionContainers[detectionContainerIndex]->DetectionContainerID,
 		DetectionContainers[detectionContainerIndex]->DetectionConditionItem.Priority
 	);
@@ -169,7 +169,7 @@ bool UDetectionSystemComponentBase::GetDetectionContainersHaveTarget(TArray<UDet
 	return true;
 }
 
-bool UDetectionSystemComponentBase::DetectionTarget(int detectionContainerIndex, TArray<AActor*>& outDetectionActors, FDetectionContainerInfo& outContainerInfo)
+bool UDetectionSystemComponentBase::DetectionTarget(int detectionContainerIndex, TArray<AActor*>& outDetectionActors, FDetectionContainerData& outContainerData)
 {
 	//调用一次探测 并返回探测到的目标
 	if (detectionContainerIndex < DetectionContainers.Num())
@@ -183,7 +183,7 @@ bool UDetectionSystemComponentBase::DetectionTarget(int detectionContainerIndex,
 		//获取探测到的目标组
 		detectionContainer->GetTargets(outDetectionActors);
 
-		outContainerInfo = FDetectionContainerInfo(
+		outContainerData = FDetectionContainerData(
 			detectionContainer->DetectionContainerID,
 			detectionContainer->DetectionConditionItem.Priority
 		);
@@ -234,7 +234,7 @@ bool UDetectionSystemComponentBase::OpenContinuousDetection(bool newOpen)
 			item->ClearAllTarget();
 		}
 
-		IsHaveBestTargetByPriority = false; BestTargetByPriority = FDetectionObjectInfo();
+		IsHaveBestTargetByPriority = false; BestTargetByPriority = FDetectionObjectData();
 	}
 
 	return false;
@@ -273,9 +273,8 @@ void UDetectionSystemComponentBase::RefreshContinuousDetection()
 	if(OnContinuousDetectionStart.IsBound())
 		OnContinuousDetectionStart.Broadcast();
 
-	//重置最佳目标数据
-	IsHaveBestTargetByPriority = false;
-	BestTargetByPriority = FDetectionObjectInfo();
+	bool GetTarget = false;
+	FDetectionObjectData BestTargetCached = FDetectionObjectData(BestTargetByPriority);
 
 	//遍历探测目标集合
 	for (auto& detectionContainer : DetectionContainers)
@@ -288,8 +287,10 @@ void UDetectionSystemComponentBase::RefreshContinuousDetection()
 		AActor* targetActor;
 		if (detectionContainer->GetTarget(targetActor))
 		{
+			GetTarget = true;
+
 			//确认是否是最佳目标
-			FDetectionObjectInfo detectionObjectInfo = FDetectionObjectInfo(targetActor, detectionContainer->DetectionContainerID, detectionContainer->DetectionConditionItem.Priority);
+			FDetectionObjectData detectionObjectInfo = FDetectionObjectData(targetActor, detectionContainer->DetectionContainerID, detectionContainer->DetectionConditionItem.Priority);
 			bool isBestTargetByWeightScore, isBestTargetByPriority;
 			CheckBestTarget(detectionContainer, detectionObjectInfo, isBestTargetByWeightScore, isBestTargetByPriority);
 
@@ -297,11 +298,25 @@ void UDetectionSystemComponentBase::RefreshContinuousDetection()
 		}
 	}
 
+	//没有目标
+	if (GetTarget == false) 
+	{
+		//重置最佳目标数据
+		IsHaveBestTargetByPriority = false;
+		BestTargetByPriority = FDetectionObjectData();
+	}
+
+	if (!UDetectionSystemUtility::EqualsDetectionObjectData(BestTargetCached, BestTargetByPriority))
+	{
+		if (OnBestTargetChange.IsBound())
+			OnBestTargetChange.Broadcast(IsHaveBestTargetByPriority, BestTargetByPriority);
+	}
+
 	if(OnContinuousDetectionEnd.IsBound())
 		OnContinuousDetectionEnd.Broadcast();
 }
 
-void UDetectionSystemComponentBase::CheckBestTarget(UDetectionContainer* detectionContainer, const FDetectionObjectInfo detectionObjectInfo, bool& isBestTargetByWeightScore, bool& isBestTargetByPriority)
+void UDetectionSystemComponentBase::CheckBestTarget(UDetectionContainer* detectionContainer, const FDetectionObjectData detectionObjectInfo, bool& isBestTargetByWeightScore, bool& isBestTargetByPriority)
 {
 	//在持续探测时 从所有探测容器获得的探测目标中 获得一个最佳探测目标
 
@@ -312,12 +327,12 @@ void UDetectionSystemComponentBase::CheckBestTarget(UDetectionContainer* detecti
 	{
 		IsHaveBestTargetByPriority = true;
 		BestTargetByPriority = detectionObjectInfo;
-		BestTargetByPriorityContainerInfo = FDetectionContainerInfo(detectionContainer->DetectionContainerID, detectionContainer->DetectionConditionItem.Priority);
+		BestTargetByPriorityContainerData = FDetectionContainerData(detectionContainer->DetectionContainerID, detectionContainer->DetectionConditionItem.Priority);
 	}
 	else if (detectionObjectInfo.Priority > BestTargetByPriority.Priority)
 	{
 		BestTargetByPriority = detectionObjectInfo;
-		BestTargetByPriorityContainerInfo = FDetectionContainerInfo(detectionContainer->DetectionContainerID, detectionContainer->DetectionConditionItem.Priority);
+		BestTargetByPriorityContainerData = FDetectionContainerData(detectionContainer->DetectionContainerID, detectionContainer->DetectionConditionItem.Priority);
 	}
 	else if (detectionObjectInfo.Priority == BestTargetByPriority.Priority)
 	{
@@ -330,7 +345,7 @@ void UDetectionSystemComponentBase::CheckBestTarget(UDetectionContainer* detecti
 		else if (detectionObjectInfo.DetectionContainerID < BestTargetByPriority.DetectionContainerID)
 		{
 			BestTargetByPriority = detectionObjectInfo;
-			BestTargetByPriorityContainerInfo = FDetectionContainerInfo(detectionContainer->DetectionContainerID, detectionContainer->DetectionConditionItem.Priority);
+			BestTargetByPriorityContainerData = FDetectionContainerData(detectionContainer->DetectionContainerID, detectionContainer->DetectionConditionItem.Priority);
 		}
 	}
 	else

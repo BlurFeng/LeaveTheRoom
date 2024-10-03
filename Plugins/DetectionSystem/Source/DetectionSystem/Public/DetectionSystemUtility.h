@@ -54,4 +54,7 @@ public:
 	*/
 	UFUNCTION()
 		static TArray<FVector> GetConeVertsInDegrees(FVector const& origin, FVector const& direction, float length, const float angle, int32 NumSides);
+
+	UFUNCTION(BlueprintPure, Category = "DetectionSystem|DetectionObjectData")
+		static bool EqualsDetectionObjectData(const FDetectionObjectData& MyDataReferenceA, const FDetectionObjectData& MyDataReferenceB);
 };

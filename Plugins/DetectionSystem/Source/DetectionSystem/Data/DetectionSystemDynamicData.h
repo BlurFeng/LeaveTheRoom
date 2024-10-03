@@ -10,12 +10,12 @@
 
 /*探测到的对象*/
 USTRUCT(BlueprintType)
-struct DETECTIONSYSTEM_API FDetectionObjectInfo
+struct DETECTIONSYSTEM_API FDetectionObjectData
 {
 	GENERATED_BODY()
 
-		FDetectionObjectInfo() { Actor = nullptr; DetectionContainerID = Priority = 0; }
-	FDetectionObjectInfo(AActor* newActor, int newDetectionContainerID, int newPriority)
+		FDetectionObjectData() { Actor = nullptr; DetectionContainerID = Priority = 0; }
+	FDetectionObjectData(AActor* newActor, int newDetectionContainerID, int newPriority)
 	{
 		Actor = newActor;
 		DetectionContainerID = newDetectionContainerID;
@@ -24,26 +24,26 @@ struct DETECTIONSYSTEM_API FDetectionObjectInfo
 
 public:
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 		AActor* Actor;
 
 	/*探测容器ID 对应探测条件配置Array的Index和 探测容器Array的Index*/
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 		int DetectionContainerID;
 
 	/*优先级 用于获取唯一最佳对象时进行判断 数值越高优先级越高（和FDetectionConditionItem中的优先级对应）*/
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 		int Priority;
 };
 
 /*探测到的对象*/
 USTRUCT(BlueprintType)
-struct DETECTIONSYSTEM_API FDetectionContainerInfo
+struct DETECTIONSYSTEM_API FDetectionContainerData
 {
 	GENERATED_BODY()
 
-		FDetectionContainerInfo() { DetectionContainerID = Priority = 0; }
-	FDetectionContainerInfo(int newDetectionContainerID, int newPriority)
+		FDetectionContainerData() { DetectionContainerID = Priority = 0; }
+	FDetectionContainerData(int newDetectionContainerID, int newPriority)
 	{
 		DetectionContainerID = newDetectionContainerID;
 		Priority = newPriority;

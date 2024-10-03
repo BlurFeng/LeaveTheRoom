@@ -15,6 +15,7 @@
 
 //无参数
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FMDDetectionAction);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FMDBestTargetChange, bool, HaveTarget, FDetectionObjectData, DetectionObjectData);
 
 /*探测容器，和探测条件配置条目对应，用于存储探测条件配置，对目标进行筛选并存储*/
 UCLASS(ClassGroup = (DetectionSystem))
@@ -147,6 +148,12 @@ public:
 	UPROPERTY(BlueprintCallable, BlueprintAssignable, Category = "DetectionSystem|Default")
 		FMDDetectionAction OnContinuousDetectionEnd;
 
+	/**
+	 * 当最佳目标改变时
+	 */
+	UPROPERTY(BlueprintCallable, BlueprintAssignable, Category = "DetectionSystem|Default")
+		FMDBestTargetChange OnBestTargetChange;
+
 	/*开启调试*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DetectionSystem|Default")
 		bool EnableDebug;
@@ -167,7 +174,7 @@ public:
 	 * @return 是否有目标
 	*/
 	UFUNCTION(BlueprintCallable, Category = "DetectionSystem|Default")
-		bool GetBestTarget(AActor*& outDetectionActor, FDetectionContainerInfo& outContainerInfo);
+		bool GetBestTarget(AActor*& outDetectionActor, FDetectionContainerData& outContainerData);
 
 	/**
 	 * 获取最佳目标 （通过Priority优先级(越小优先级越高，优先级相同时判断DetectionContainerID探测条件列表中的下标）
@@ -175,7 +182,7 @@ public:
 	 * @return 是否有目标
 	*/
 	UFUNCTION(BlueprintCallable, Category = "DetectionSystem|Default")
-	bool GetBestTargetByPriority(AActor*& outDetectionActor, FDetectionContainerInfo& outContainerInfo);
+	bool GetBestTargetByPriority(AActor*& outDetectionActor, FDetectionContainerData& outContainerData);
 
 	/**
 	 获取目标 某个探测容器的目标
@@ -184,7 +191,7 @@ public:
 	 * @return 是否有目标
 	*/
 	UFUNCTION(BlueprintCallable, Category = "DetectionSystem|Default")
-		bool GetTarget(int detectionContainerIndex, AActor*& outDetectionActor, FDetectionContainerInfo& outContainerInfo);
+		bool GetTarget(int detectionContainerIndex, AActor*& outDetectionActor, FDetectionContainerData& outContainerData);
 
 	/**
 	 获取目标组 某个探测容器的目标
@@ -193,7 +200,7 @@ public:
 	 * @return 是否有目标
 	*/
 	UFUNCTION(BlueprintCallable, Category = "DetectionSystem|Default")
-		bool GetTargets(int detectionContainerIndex, TArray<AActor*>& outDetectionActors, FDetectionContainerInfo& outContainerInfo);
+		bool GetTargets(int detectionContainerIndex, TArray<AActor*>& outDetectionActors, FDetectionContainerData& outContainerData);
 
 	/**
 	 获取所有有探测到目标的容器
@@ -211,7 +218,7 @@ public:
 	 * @return 是否获得了目标对象
 	*/
 	UFUNCTION(BlueprintCallable, Category = "DetectionSystem|Default")
-		bool DetectionTarget(int detectionContainerIndex, TArray<AActor*>& outDetectionActors, FDetectionContainerInfo& outContainerInfo);
+		bool DetectionTarget(int detectionContainerIndex, TArray<AActor*>& outDetectionActors, FDetectionContainerData& outContainerData);
 
 	/**
 	 * 初始化持续探测Timer 当已经存在时会清楚旧的生成新的
@@ -258,11 +265,11 @@ private:
 
 	/*最佳目标 通过优先级(越小优先级越高，优先级相同时判断探测条件列表中的下标*/
 	UPROPERTY()
-		FDetectionObjectInfo BestTargetByPriority;
+		FDetectionObjectData BestTargetByPriority;
 
 	/*最佳目标 通过优先级 对应的探测容器*/
 	UPROPERTY()
-		FDetectionContainerInfo BestTargetByPriorityContainerInfo;
+		FDetectionContainerData BestTargetByPriorityContainerData;
 
 	/*持续刷新探测TimerHandle*/
 	UPROPERTY()
@@ -292,7 +299,7 @@ private:
 
 	/*持续探测时 确认并筛选出最佳目标*/
 	UFUNCTION()
-		void CheckBestTarget(UDetectionContainer* detectionContainer, const FDetectionObjectInfo detectionObjectInfo, bool& isBestTargetByWeightScore, bool& isBestTargetByPriority);
+		void CheckBestTarget(UDetectionContainer* detectionContainer, const FDetectionObjectData detectionObjectInfo, bool& isBestTargetByWeightScore, bool& isBestTargetByPriority);
 
 	UFUNCTION()
 		void OnActorDestroy(AActor* DestroyedActor);

@@ -159,3 +159,9 @@ TArray<FVector> UDetectionSystemUtility::GetConeVertsInDegrees(FVector const& or
 
 	return ConeVerts;
 }
+
+bool UDetectionSystemUtility::EqualsDetectionObjectData(const FDetectionObjectData& MyDataReferenceA, const FDetectionObjectData& MyDataReferenceB)
+{
+	return MyDataReferenceA.DetectionContainerID == MyDataReferenceB.DetectionContainerID
+		&& MyDataReferenceA.Actor == MyDataReferenceB.Actor;
+}
