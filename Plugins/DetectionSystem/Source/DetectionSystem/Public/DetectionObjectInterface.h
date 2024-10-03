@@ -48,8 +48,8 @@ public:
 	 * @return 目标拥有的Tags
 	*/
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "DetectionSystem|DetectionObjectInterface")
-		bool GetGameplayTags(TArray<FName>& outGameplayTags);
-	virtual bool GetGameplayTags_Implementation(TArray<FName>& outGameplayTags);
+		bool GetGameplayTags(TArray<FName>& OutGameplayTags);
+	virtual bool GetGameplayTags_Implementation(TArray<FName>& OutGameplayTags);
 
 	/**
 	 * 能否被选择 最迟确认（在确认其他条件都符合后执行
@@ -57,8 +57,8 @@ public:
 	 * @return 是否能被选择
 	*/
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "DetectionSystem|DetectionObjectInterface")
-		bool IsCanSelect(AActor* actor);
-	virtual bool IsCanSelect_Implementation(AActor* actor);
+		bool IsCanSelect(AActor* Actor);
+	virtual bool IsCanSelect_Implementation(AActor* Actor);
 
 	/**
 	 * 获取几何范围参数
@@ -67,6 +67,6 @@ public:
 	 * @return
 	*/
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "DetectionSystem|DetectionObjectInterface")
-		bool GetGeometryRangeParam(EDetectionRangeType& RangeType, FString& param);
-	virtual bool GetGeometryRangeParam_Implementation(EDetectionRangeType& RangeType, FString& param);
+		bool GetGeometryRangeParam(EDetectionRangeType& RangeType, FString& Param);
+	virtual bool GetGeometryRangeParam_Implementation(EDetectionRangeType& RangeType, FString& Param);
 };

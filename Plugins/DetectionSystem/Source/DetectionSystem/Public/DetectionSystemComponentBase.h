@@ -46,7 +46,7 @@ public:
 	 * @param newDetectionConditionItem 探测条件配置项目
 	*/
 	UFUNCTION()
-		void Init(AActor* newOwnerActor, int newDetectionContainerID, FDetectionConditionItem& newDetectionConditionItem);
+		void Init(AActor* NewOwnerActor, int NewDetectionContainerID, FDetectionConditionItem& NewDetectionConditionItem);
 
 	/*执行一次探测 并更新数据*/
 	UFUNCTION()
@@ -57,18 +57,18 @@ public:
 	 * @param outDetectionActor - 探测到的目标Actor
 	*/
 	UFUNCTION(BlueprintCallable, Category = "DetectionSystem|DetectionContainer")
-		bool GetTarget(AActor*& outDetectionActor);
+		bool GetTarget(AActor*& OutDetectionActor);
 
 	/**
 	 获取最佳目标组
 	 * @param outDetectionActors - 探测到的目标Actor组
 	*/
 	UFUNCTION(BlueprintCallable, Category = "DetectionSystem|DetectionContainer")
-		bool GetTargets(TArray<AActor*>& outDetectionActors);
+		bool GetTargets(TArray<AActor*>& OutDetectionActors);
 
 	/*获取目标分数*/
 	UFUNCTION()
-		int GetTargetScore(int itemIndex);
+		int GetTargetScore(int ItemIndex);
 
 	/**
 	 * 清空所有目标
@@ -165,8 +165,8 @@ public:
 	@return 是否成功执行初始化
 	*/
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "DetectionSystem|Default")
-		bool Init(FDetectionConditionConfig newDetectionConditionConfig, bool openContinuousDetection = true);
-	bool Init_Implementation(FDetectionConditionConfig newDetectionConditionConfig, bool openContinuousDetection = true);
+		bool Init(FDetectionConditionConfig NewDetectionConditionConfig, bool OpenContinuousDetection = true);
+	bool Init_Implementation(FDetectionConditionConfig NewDetectionConditionConfig, bool OpenContinuousDetection = true);
 
 	/**
 	 * 获取最佳目标
@@ -174,7 +174,7 @@ public:
 	 * @return 是否有目标
 	*/
 	UFUNCTION(BlueprintCallable, Category = "DetectionSystem|Default")
-		bool GetBestTarget(AActor*& outDetectionActor, FDetectionContainerData& outContainerData);
+		bool GetBestTarget(AActor*& OutDetectionActor, FDetectionContainerData& OutContainerData);
 
 	/**
 	 * 获取最佳目标 （通过Priority优先级(越小优先级越高，优先级相同时判断DetectionContainerID探测条件列表中的下标）
@@ -182,7 +182,7 @@ public:
 	 * @return 是否有目标
 	*/
 	UFUNCTION(BlueprintCallable, Category = "DetectionSystem|Default")
-	bool GetBestTargetByPriority(AActor*& outDetectionActor, FDetectionContainerData& outContainerData);
+	bool GetBestTargetByPriority(AActor*& OutDetectionActor, FDetectionContainerData& OutContainerData);
 
 	/**
 	 获取目标 某个探测容器的目标
@@ -191,7 +191,7 @@ public:
 	 * @return 是否有目标
 	*/
 	UFUNCTION(BlueprintCallable, Category = "DetectionSystem|Default")
-		bool GetTarget(int detectionContainerIndex, AActor*& outDetectionActor, FDetectionContainerData& outContainerData);
+		bool GetTarget(int DetectionContainerIndex, AActor*& OutDetectionActor, FDetectionContainerData& OutContainerData);
 
 	/**
 	 获取目标组 某个探测容器的目标
@@ -200,7 +200,7 @@ public:
 	 * @return 是否有目标
 	*/
 	UFUNCTION(BlueprintCallable, Category = "DetectionSystem|Default")
-		bool GetTargets(int detectionContainerIndex, TArray<AActor*>& outDetectionActors, FDetectionContainerData& outContainerData);
+		bool GetTargets(int DetectionContainerIndex, TArray<AActor*>& OutDetectionActors, FDetectionContainerData& OutContainerData);
 
 	/**
 	 获取所有有探测到目标的容器
@@ -209,7 +209,7 @@ public:
 	 * @return 是否有目标
 	*/
 	UFUNCTION(BlueprintCallable, Category = "DetectionSystem|Default")
-		bool GetDetectionContainersHaveTarget(TArray<UDetectionContainer*>& outDetectionContainers, int sortType = 0);
+		bool GetDetectionContainersHaveTarget(TArray<UDetectionContainer*>& OutDetectionContainers, int SortType = 0);
 
 	/**
 	 * 执行一次探测 并返回目标对象
@@ -218,7 +218,7 @@ public:
 	 * @return 是否获得了目标对象
 	*/
 	UFUNCTION(BlueprintCallable, Category = "DetectionSystem|Default")
-		bool DetectionTarget(int detectionContainerIndex, TArray<AActor*>& outDetectionActors, FDetectionContainerData& outContainerData);
+		bool DetectionTarget(int DetectionContainerIndex, TArray<AActor*>& OutDetectionActors, FDetectionContainerData& OutContainerData);
 
 	/**
 	 * 初始化持续探测Timer 当已经存在时会清楚旧的生成新的
@@ -227,7 +227,7 @@ public:
 	 * @return
 	*/
 	UFUNCTION()
-		bool InitContinuousDetection(bool newOpen, float intervalTime = -1);
+		bool InitContinuousDetection(bool NewOpen, float IntervalTime = -1);
 
 	/**
 	 * 打开或关闭持续探测Timer
@@ -235,7 +235,7 @@ public:
 	 * @return 是否成功设置
 	*/
 	UFUNCTION(BlueprintCallable, Category = "DetectionSystem|Default")
-		bool OpenContinuousDetection(bool newOpen);
+		bool OpenContinuousDetection(bool NewOpen);
 
 	/**
 	 * 获取所有探测容器 探测容器数量和探测条件配置Config的数量一致
@@ -243,7 +243,7 @@ public:
 	 * @return 是否有一个以上的探测容器
 	*/
 	UFUNCTION(BlueprintCallable, Category = "DetectionSystem|Default")
-	bool GetDetectionContainers(TArray<UDetectionContainer*>& outDetectionContainers);
+	bool GetDetectionContainers(TArray<UDetectionContainer*>& OutDetectionContainers);
 
 	/**
 	 * 获取探测容器 根据EDetectionPurpose探测用途枚举
@@ -251,7 +251,7 @@ public:
 	 * @return 是否有探测容器
 	*/
 	UFUNCTION(BlueprintCallable, Category = "DetectionSystem|Default")
-		bool GetDetectionContainer(FName purposeTag, UDetectionContainer*& outDetectionContainer);
+		bool GetDetectionContainer(FName PurposeTag, UDetectionContainer*& OutDetectionContainer);
 
 private:
 
@@ -299,7 +299,7 @@ private:
 
 	/*持续探测时 确认并筛选出最佳目标*/
 	UFUNCTION()
-		void CheckBestTarget(UDetectionContainer* detectionContainer, const FDetectionObjectData detectionObjectInfo, bool& isBestTargetByWeightScore, bool& isBestTargetByPriority);
+		void CheckBestTarget(UDetectionContainer* DetectionContainer, const FDetectionObjectData DetectionObjectInfo, bool& IsBestTargetByWeightScore, bool& IsBestTargetByPriority);
 
 	UFUNCTION()
 		void OnActorDestroy(AActor* DestroyedActor);

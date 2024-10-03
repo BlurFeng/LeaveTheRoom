@@ -62,8 +62,8 @@ void UDetectionSystemComponentBase::TickComponent(float DeltaTime, ELevelTick Ti
 }
 
 bool UDetectionSystemComponentBase::Init_Implementation(
-	FDetectionConditionConfig newDetectionConditionConfig,
-	bool openContinuousDetection)
+	FDetectionConditionConfig NewDetectionConditionConfig,
+	bool OpenContinuousDetection)
 {
 	if (IsInit) return false;
 	IsInit = true;
@@ -71,7 +71,7 @@ bool UDetectionSystemComponentBase::Init_Implementation(
 	OwnerActor = GetOwner();
 
 	//获取配置的持续探测条件项目组
-	DetectionConditionItems = newDetectionConditionConfig.DetectionConditionItems;
+	DetectionConditionItems = NewDetectionConditionConfig.DetectionConditionItems;
 
 	if (DetectionConditionItems.Num() > 0) 
 	{
@@ -85,64 +85,64 @@ bool UDetectionSystemComponentBase::Init_Implementation(
 		}
 
 		//持续探测Timer 开启或不开启
-		InitContinuousDetection(openContinuousDetection, newDetectionConditionConfig.RefreshContinuousDetectionIntervalTime);
+		InitContinuousDetection(OpenContinuousDetection, NewDetectionConditionConfig.RefreshContinuousDetectionIntervalTime);
 	}
 
 	return true;
 }
 
-bool UDetectionSystemComponentBase::GetBestTarget(AActor*& outDetectionActor, FDetectionContainerData& outContainerData)
+bool UDetectionSystemComponentBase::GetBestTarget(AActor*& OutDetectionActor, FDetectionContainerData& OutContainerData)
 {
-	if (GetBestTargetByPriority(outDetectionActor, outContainerData))
+	if (GetBestTargetByPriority(OutDetectionActor, OutContainerData))
 		return true;
 
 	return false;
 }
 
-bool UDetectionSystemComponentBase::GetBestTargetByPriority(AActor*& outDetectionActor, FDetectionContainerData& outContainerData)
+bool UDetectionSystemComponentBase::GetBestTargetByPriority(AActor*& OutDetectionActor, FDetectionContainerData& OutContainerData)
 {
 	if (IsHaveBestTargetByPriority)
 	{
-		outDetectionActor = BestTargetByPriority.Actor;
-		outContainerData = BestTargetByPriorityContainerData;
+		OutDetectionActor = BestTargetByPriority.Actor;
+		OutContainerData = BestTargetByPriorityContainerData;
 		return true;
 	}
 
 	return false;
 }
 
-bool UDetectionSystemComponentBase::GetTarget(int detectionContainerIndex, AActor*& outDetectionActor, FDetectionContainerData& outContainerData)
+bool UDetectionSystemComponentBase::GetTarget(int DetectionContainerIndex, AActor*& OutDetectionActor, FDetectionContainerData& OutContainerData)
 {
-	if (!DetectionContainers.IsValidIndex(detectionContainerIndex)) return false;
+	if (!DetectionContainers.IsValidIndex(DetectionContainerIndex)) return false;
 
-	outContainerData = FDetectionContainerData(
-		DetectionContainers[detectionContainerIndex]->DetectionContainerID, 
-		DetectionContainers[detectionContainerIndex]->DetectionConditionItem.Priority
+	OutContainerData = FDetectionContainerData(
+		DetectionContainers[DetectionContainerIndex]->DetectionContainerID, 
+		DetectionContainers[DetectionContainerIndex]->DetectionConditionItem.Priority
 	);
 
-	return DetectionContainers[detectionContainerIndex]->GetTarget(outDetectionActor);
+	return DetectionContainers[DetectionContainerIndex]->GetTarget(OutDetectionActor);
 }
 
-bool UDetectionSystemComponentBase::GetTargets(int detectionContainerIndex, TArray<AActor*>& outDetectionActors, FDetectionContainerData& outContainerData)
+bool UDetectionSystemComponentBase::GetTargets(int DetectionContainerIndex, TArray<AActor*>& OutDetectionActors, FDetectionContainerData& OutContainerData)
 {
-	if (!DetectionContainers.IsValidIndex(detectionContainerIndex)) return false;
+	if (!DetectionContainers.IsValidIndex(DetectionContainerIndex)) return false;
 
-	outContainerData = FDetectionContainerData(
-		DetectionContainers[detectionContainerIndex]->DetectionContainerID,
-		DetectionContainers[detectionContainerIndex]->DetectionConditionItem.Priority
+	OutContainerData = FDetectionContainerData(
+		DetectionContainers[DetectionContainerIndex]->DetectionContainerID,
+		DetectionContainers[DetectionContainerIndex]->DetectionConditionItem.Priority
 	);
 
-	outDetectionActors.SetNum(1);
-	return DetectionContainers[detectionContainerIndex]->GetTargets(outDetectionActors);
+	OutDetectionActors.SetNum(1);
+	return DetectionContainers[DetectionContainerIndex]->GetTargets(OutDetectionActors);
 }
 
-bool UDetectionSystemComponentBase::GetDetectionContainersHaveTarget(TArray<UDetectionContainer*>& outDetectionContainers, int sortType)
+bool UDetectionSystemComponentBase::GetDetectionContainersHaveTarget(TArray<UDetectionContainer*>& OutDetectionContainers, int SortType)
 {
 	if (HaveTargetDetectionContainers.Num() == 0) return false;
 
 	//TODO 之后如果有多重排序方式 可以将排序结果缓存
 	//进行排序
-	switch (sortType)
+	switch (SortType)
 	{
 	case 0:
 		for (int i = 0; i < HaveTargetDetectionContainers.Num(); i++)
@@ -164,37 +164,37 @@ bool UDetectionSystemComponentBase::GetDetectionContainersHaveTarget(TArray<UDet
 		break;
 	}
 
-	outDetectionContainers = HaveTargetDetectionContainers;
+	OutDetectionContainers = HaveTargetDetectionContainers;
 
 	return true;
 }
 
-bool UDetectionSystemComponentBase::DetectionTarget(int detectionContainerIndex, TArray<AActor*>& outDetectionActors, FDetectionContainerData& outContainerData)
+bool UDetectionSystemComponentBase::DetectionTarget(int DetectionContainerIndex, TArray<AActor*>& OutDetectionActors, FDetectionContainerData& OutContainerData)
 {
 	//调用一次探测 并返回探测到的目标
-	if (detectionContainerIndex < DetectionContainers.Num())
+	if (DetectionContainerIndex < DetectionContainers.Num())
 	{
 		//此次探测仅对单个detectionContainer的数据造成影响 其他根据所有detectionContainer的对象筛选出的BestTarget等数据并不会更新 因为这些数据是根据持续探测更新的
 
-		UDetectionContainer* detectionContainer = DetectionContainers[detectionContainerIndex];
+		UDetectionContainer* detectionContainer = DetectionContainers[DetectionContainerIndex];
 
 		detectionContainer->OnDetection();
 		
 		//获取探测到的目标组
-		detectionContainer->GetTargets(outDetectionActors);
+		detectionContainer->GetTargets(OutDetectionActors);
 
-		outContainerData = FDetectionContainerData(
+		OutContainerData = FDetectionContainerData(
 			detectionContainer->DetectionContainerID,
 			detectionContainer->DetectionConditionItem.Priority
 		);
 
-		return outDetectionActors.Num() > 0;
+		return OutDetectionActors.Num() > 0;
 	}
 
 	return false;
 }
 
-bool UDetectionSystemComponentBase::InitContinuousDetection(bool newOpen, float intervalTime)
+bool UDetectionSystemComponentBase::InitContinuousDetection(bool NewOpen, float IntervalTime)
 {
 	//已经存在TimerHandle 清除旧的
 	if (RefreshContinuousDetectionTimerHandle.IsValid())
@@ -203,22 +203,22 @@ bool UDetectionSystemComponentBase::InitContinuousDetection(bool newOpen, float 
 	}
 
 	//生成Timer
-	if (!RefreshContinuousDetectionTimerHandle.IsValid() && intervalTime > 0)
+	if (!RefreshContinuousDetectionTimerHandle.IsValid() && IntervalTime > 0)
 	{
-		RefreshContinuousDetectionIntervalTime = intervalTime;
+		RefreshContinuousDetectionIntervalTime = IntervalTime;
 		RefreshContinuousDetectionTimerHandle = UKismetSystemLibrary::K2_SetTimer(this, "RefreshContinuousDetection", RefreshContinuousDetectionIntervalTime, true);
 	}
 	
 	IsOpenContinuousDetection = true;
-	OpenContinuousDetection(newOpen);//开启或关闭
+	OpenContinuousDetection(NewOpen);//开启或关闭
 
 	return true;
 }
 
-bool UDetectionSystemComponentBase::OpenContinuousDetection(bool newOpen)
+bool UDetectionSystemComponentBase::OpenContinuousDetection(bool NewOpen)
 {
-	if (!RefreshContinuousDetectionTimerHandle.IsValid() || IsOpenContinuousDetection == newOpen) return false;
-	IsOpenContinuousDetection = newOpen;
+	if (!RefreshContinuousDetectionTimerHandle.IsValid() || IsOpenContinuousDetection == NewOpen) return false;
+	IsOpenContinuousDetection = NewOpen;
 
 	if (IsOpenContinuousDetection)
 	{
@@ -240,13 +240,13 @@ bool UDetectionSystemComponentBase::OpenContinuousDetection(bool newOpen)
 	return false;
 }
 
-bool UDetectionSystemComponentBase::GetDetectionContainers(TArray<UDetectionContainer*>& outDetectionContainers)
+bool UDetectionSystemComponentBase::GetDetectionContainers(TArray<UDetectionContainer*>& OutDetectionContainers)
 {
-	outDetectionContainers = DetectionContainers;
-	return outDetectionContainers.Num() > 0;
+	OutDetectionContainers = DetectionContainers;
+	return OutDetectionContainers.Num() > 0;
 }
 
-bool UDetectionSystemComponentBase::GetDetectionContainer(FName purposeName, UDetectionContainer*& outDetectionContainer)
+bool UDetectionSystemComponentBase::GetDetectionContainer(FName PurposeName, UDetectionContainer*& OutDetectionContainer)
 {
 	if (DetectionContainers.Num() == 0) return false;
 
@@ -254,9 +254,9 @@ bool UDetectionSystemComponentBase::GetDetectionContainer(FName purposeName, UDe
 	{
 		if (item == nullptr) continue;
 
-		if (item->DetectionConditionItem.PurposeTag == purposeName)
+		if (item->DetectionConditionItem.PurposeTag == PurposeName)
 		{
-			outDetectionContainer = item;
+			OutDetectionContainer = item;
 			return true;
 		}
 	}
@@ -277,24 +277,24 @@ void UDetectionSystemComponentBase::RefreshContinuousDetection()
 	FDetectionObjectData BestTargetCached = FDetectionObjectData(BestTargetByPriority);
 
 	//遍历探测目标集合
-	for (auto& detectionContainer : DetectionContainers)
+	for (auto& DetectionContainer : DetectionContainers)
 	{
-		if (detectionContainer == nullptr) continue;
+		if (DetectionContainer == nullptr) continue;
 
-		detectionContainer->OnDetection();
+		DetectionContainer->OnDetection();
 
 		//Component需要从所有探测项目中筛选出一个最佳的目标
 		AActor* targetActor;
-		if (detectionContainer->GetTarget(targetActor))
+		if (DetectionContainer->GetTarget(targetActor))
 		{
 			GetTarget = true;
 
 			//确认是否是最佳目标
-			FDetectionObjectData detectionObjectInfo = FDetectionObjectData(targetActor, detectionContainer->DetectionContainerID, detectionContainer->DetectionConditionItem.Priority);
+			FDetectionObjectData detectionObjectInfo = FDetectionObjectData(targetActor, DetectionContainer->DetectionContainerID, DetectionContainer->DetectionConditionItem.Priority);
 			bool isBestTargetByWeightScore, isBestTargetByPriority;
-			CheckBestTarget(detectionContainer, detectionObjectInfo, isBestTargetByWeightScore, isBestTargetByPriority);
+			CheckBestTarget(DetectionContainer, detectionObjectInfo, isBestTargetByWeightScore, isBestTargetByPriority);
 
-			HaveTargetDetectionContainers.Add(detectionContainer);
+			HaveTargetDetectionContainers.Add(DetectionContainer);
 		}
 	}
 
@@ -316,40 +316,40 @@ void UDetectionSystemComponentBase::RefreshContinuousDetection()
 		OnContinuousDetectionEnd.Broadcast();
 }
 
-void UDetectionSystemComponentBase::CheckBestTarget(UDetectionContainer* detectionContainer, const FDetectionObjectData detectionObjectInfo, bool& isBestTargetByWeightScore, bool& isBestTargetByPriority)
+void UDetectionSystemComponentBase::CheckBestTarget(UDetectionContainer* DetectionContainer, const FDetectionObjectData DetectionObjectInfo, bool& IsBestTargetByWeightScore, bool& IsBestTargetByPriority)
 {
 	//在持续探测时 从所有探测容器获得的探测目标中 获得一个最佳探测目标
 
-	isBestTargetByPriority = true;
+	IsBestTargetByPriority = true;
 	
 	//根据探测条件配置的优先级获得的最佳目标
 	if (!IsHaveBestTargetByPriority)
 	{
 		IsHaveBestTargetByPriority = true;
-		BestTargetByPriority = detectionObjectInfo;
-		BestTargetByPriorityContainerData = FDetectionContainerData(detectionContainer->DetectionContainerID, detectionContainer->DetectionConditionItem.Priority);
+		BestTargetByPriority = DetectionObjectInfo;
+		BestTargetByPriorityContainerData = FDetectionContainerData(DetectionContainer->DetectionContainerID, DetectionContainer->DetectionConditionItem.Priority);
 	}
-	else if (detectionObjectInfo.Priority > BestTargetByPriority.Priority)
+	else if (DetectionObjectInfo.Priority > BestTargetByPriority.Priority)
 	{
-		BestTargetByPriority = detectionObjectInfo;
-		BestTargetByPriorityContainerData = FDetectionContainerData(detectionContainer->DetectionContainerID, detectionContainer->DetectionConditionItem.Priority);
+		BestTargetByPriority = DetectionObjectInfo;
+		BestTargetByPriorityContainerData = FDetectionContainerData(DetectionContainer->DetectionContainerID, DetectionContainer->DetectionConditionItem.Priority);
 	}
-	else if (detectionObjectInfo.Priority == BestTargetByPriority.Priority)
+	else if (DetectionObjectInfo.Priority == BestTargetByPriority.Priority)
 	{
 		//同一个探测容器，但目标可能变化了
-		if (detectionObjectInfo.DetectionContainerID == BestTargetByPriority.DetectionContainerID) 
+		if (DetectionObjectInfo.DetectionContainerID == BestTargetByPriority.DetectionContainerID) 
 		{
-			BestTargetByPriority = detectionObjectInfo;
+			BestTargetByPriority = DetectionObjectInfo;
 		}
 		//当优先级相等时 确认权重分 和探测的下标ID
-		else if (detectionObjectInfo.DetectionContainerID < BestTargetByPriority.DetectionContainerID)
+		else if (DetectionObjectInfo.DetectionContainerID < BestTargetByPriority.DetectionContainerID)
 		{
-			BestTargetByPriority = detectionObjectInfo;
-			BestTargetByPriorityContainerData = FDetectionContainerData(detectionContainer->DetectionContainerID, detectionContainer->DetectionConditionItem.Priority);
+			BestTargetByPriority = DetectionObjectInfo;
+			BestTargetByPriorityContainerData = FDetectionContainerData(DetectionContainer->DetectionContainerID, DetectionContainer->DetectionConditionItem.Priority);
 		}
 	}
 	else
-		isBestTargetByPriority = false;
+		IsBestTargetByPriority = false;
 }
 
 void UDetectionSystemComponentBase::OnActorDestroy(AActor* DestroyedActor)
@@ -361,11 +361,11 @@ void UDetectionSystemComponentBase::OnActorDestroy(AActor* DestroyedActor)
 #pragma region UDetectionContainer
 
 void UDetectionContainer::Init(
-	AActor* newOwnerActor, int newDetectionContainerID, FDetectionConditionItem& newDetectionConditionItem)
+	AActor* NewOwnerActor, int NewDetectionContainerID, FDetectionConditionItem& NewDetectionConditionItem)
 {
-	OwnerActor = newOwnerActor;
-	DetectionContainerID = newDetectionContainerID;
-	DetectionConditionItem = newDetectionConditionItem;
+	OwnerActor = NewOwnerActor;
+	DetectionContainerID = NewDetectionContainerID;
+	DetectionConditionItem = NewDetectionConditionItem;
 }
 
 void UDetectionContainer::OnDetection()
@@ -422,28 +422,28 @@ void UDetectionContainer::OnDetection()
 	}
 }
 
-bool UDetectionContainer::GetTarget(AActor*& outDetectionActor)
+bool UDetectionContainer::GetTarget(AActor*& OutDetectionActor)
 {
 	if (!IsHaveTargetObject) return false;
 
-	outDetectionActor = TargetActor;
+	OutDetectionActor = TargetActor;
 
 	return true;
 }
 
-bool UDetectionContainer::GetTargets(TArray<AActor*>& outDetectionActors)
+bool UDetectionContainer::GetTargets(TArray<AActor*>& OutDetectionActors)
 {
 	if (!IsHaveTargetObject) return false;
 
-	outDetectionActors = TargetActors;
+	OutDetectionActors = TargetActors;
 
 	return true;
 }
 
-int UDetectionContainer::GetTargetScore(int itemIndex)
+int UDetectionContainer::GetTargetScore(int ItemIndex)
 {
 	if(EnvQueryInstance == nullptr) return -1;
-	return EnvQueryInstance->GetItemScore(itemIndex);
+	return EnvQueryInstance->GetItemScore(ItemIndex);
 }
 
 void UDetectionContainer::ClearAllTarget()

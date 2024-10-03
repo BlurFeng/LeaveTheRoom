@@ -15,17 +15,17 @@ FVector IDetectionObjectInterface::GetDetectionLocation_Implementation()
 	return FVector();
 }
 
-bool IDetectionObjectInterface::GetGameplayTags_Implementation(TArray<FName>& outGameplayTags)
+bool IDetectionObjectInterface::GetGameplayTags_Implementation(TArray<FName>& OutGameplayTags)
 {
 	return false;
 }
 
-bool IDetectionObjectInterface::IsCanSelect_Implementation(AActor* actor)
+bool IDetectionObjectInterface::IsCanSelect_Implementation(AActor* Actor)
 {
 	return true;
 }
 
-bool IDetectionObjectInterface::GetGeometryRangeParam_Implementation(EDetectionRangeType& RangeType, FString& param)
+bool IDetectionObjectInterface::GetGeometryRangeParam_Implementation(EDetectionRangeType& RangeType, FString& Param)
 {
 	return false;
 }

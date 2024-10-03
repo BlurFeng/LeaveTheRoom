@@ -59,23 +59,23 @@ bool UDetectionSystemUtility::DetectionTarget(
 }
 
 void UDetectionSystemUtility::DetectionDebugDrawInvertedCone(
-	const UObject* worldContextObject,
-	FVector originPointPos, FVector originPointReferenceDir, FRotator originPointRotator, float radius, float angle, FVector originPointPosOffset,
-	int32 numSides, float lifeTime, float thickness)
+	const UObject* WorldContextObject,
+	FVector OriginPointPos, FVector OriginPointReferenceDir, FRotator OriginPointRotator, float Radius, float Angle, FVector OriginPointPosOffset,
+	int32 NumSides, float LifeTime, float Thickness)
 {
 	//探测中心点偏移
-	if (originPointPosOffset != FVector::ZeroVector)
-		originPointPos = originPointPos + originPointRotator.Quaternion() * originPointPosOffset;
+	if (OriginPointPosOffset != FVector::ZeroVector)
+		OriginPointPos = OriginPointPos + OriginPointRotator.Quaternion() * OriginPointPosOffset;
 
-	const FVector endPoint = originPointPos + originPointReferenceDir.GetSafeNormal() * radius;
+	const FVector endPoint = OriginPointPos + OriginPointReferenceDir.GetSafeNormal() * Radius;
 	//绘制探测轴心线
-	UKismetSystemLibrary::DrawDebugArrow(worldContextObject, originPointPos, endPoint, thickness * 20.f, FLinearColor::Red, lifeTime, thickness);
+	UKismetSystemLibrary::DrawDebugArrow(WorldContextObject, OriginPointPos, endPoint, Thickness * 20.f, FLinearColor::Red, LifeTime, Thickness);
 
-	float drawAngle = angle / 2.f;
+	float drawAngle = Angle / 2.f;
 	//绘制圆锥范围
-	UKismetSystemLibrary::DrawDebugConeInDegrees(worldContextObject, originPointPos,
-		originPointReferenceDir, radius, drawAngle, drawAngle, numSides,
-		FLinearColor::Blue, lifeTime, thickness);
+	UKismetSystemLibrary::DrawDebugConeInDegrees(WorldContextObject, OriginPointPos,
+		OriginPointReferenceDir, Radius, drawAngle, drawAngle, NumSides,
+		FLinearColor::Blue, LifeTime, Thickness);
 
 
 	//绘制锥形底面
@@ -84,31 +84,31 @@ void UDetectionSystemUtility::DetectionDebugDrawInvertedCone(
 	drawConeVerts[2] = drawConeVerts[7] = endPoint;
 
 	TArray<FVector> drawConeVertsTemp = UDetectionSystemUtility::GetConeVertsInDegrees(
-		originPointPos, originPointReferenceDir, radius, drawAngle, 4);
+		OriginPointPos, OriginPointReferenceDir, Radius, drawAngle, 4);
 	drawConeVerts[0] = drawConeVertsTemp[0]; drawConeVerts[4] = drawConeVertsTemp[2];
 	drawConeVerts[5] = drawConeVertsTemp[1]; drawConeVerts[9] = drawConeVertsTemp[3];
 
 	drawConeVertsTemp = UDetectionSystemUtility::GetConeVertsInDegrees(
-		originPointPos, originPointReferenceDir, radius, drawAngle / 2.f, 4);
+		OriginPointPos, OriginPointReferenceDir, Radius, drawAngle / 2.f, 4);
 	drawConeVerts[1] = drawConeVertsTemp[0]; drawConeVerts[3] = drawConeVertsTemp[2];
 	drawConeVerts[6] = drawConeVertsTemp[1]; drawConeVerts[8] = drawConeVertsTemp[3];
 
 	for (size_t i = 0; i < 4; i++)
 	{
-		UKismetSystemLibrary::DrawDebugLine(worldContextObject, drawConeVerts[i], drawConeVerts[i + 1], FLinearColor::Red, lifeTime, thickness);
+		UKismetSystemLibrary::DrawDebugLine(WorldContextObject, drawConeVerts[i], drawConeVerts[i + 1], FLinearColor::Red, LifeTime, Thickness);
 	}
 
 	for (size_t i = 5; i < 9; i++)
 	{
-		UKismetSystemLibrary::DrawDebugLine(worldContextObject, drawConeVerts[i], drawConeVerts[i + 1], FLinearColor::Red, lifeTime, thickness);
+		UKismetSystemLibrary::DrawDebugLine(WorldContextObject, drawConeVerts[i], drawConeVerts[i + 1], FLinearColor::Red, LifeTime, Thickness);
 	}
 }
 
-TArray<FVector> UDetectionSystemUtility::GetConeVertsInDegrees(FVector const& origin, FVector const& direction, float length, const float angle, int32 NumSides)
+TArray<FVector> UDetectionSystemUtility::GetConeVertsInDegrees(FVector const& Origin, FVector const& Direction, float Length, const float Angle, int32 NumSides)
 {
 	NumSides = FMath::Max(NumSides, 4);
 
-	float radians = FMath::DegreesToRadians(angle);
+	float radians = FMath::DegreesToRadians(Angle);
 
 	const float Angle1 = FMath::Clamp<float>(radians, (float)KINDA_SMALL_NUMBER, (float)(PI - KINDA_SMALL_NUMBER));
 	const float Angle2 = FMath::Clamp<float>(radians, (float)KINDA_SMALL_NUMBER, (float)(PI - KINDA_SMALL_NUMBER));
@@ -148,9 +148,9 @@ TArray<FVector> UDetectionSystemUtility::GetConeVertsInDegrees(FVector const& or
 
 	// Calculate transform for cone.
 	FVector YAxis, ZAxis;
-	FVector DirectionNorm = direction.GetSafeNormal();
+	FVector DirectionNorm = Direction.GetSafeNormal();
 	DirectionNorm.FindBestAxisVectors(YAxis, ZAxis);
-	const FMatrix ConeToWorld = FScaleMatrix(FVector(length)) * FMatrix(DirectionNorm, YAxis, ZAxis, origin);
+	const FMatrix ConeToWorld = FScaleMatrix(FVector(Length)) * FMatrix(DirectionNorm, YAxis, ZAxis, Origin);
 
 	for (size_t i = 0; i < NumSides; i++)
 	{

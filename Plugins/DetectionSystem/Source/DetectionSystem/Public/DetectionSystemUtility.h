@@ -43,9 +43,9 @@ public:
 	*/
 	UFUNCTION(BlueprintCallable, Category = "DetectionSystem|DetectionObject", meta = (WorldContext = "worldContextObject"))
 		static void DetectionDebugDrawInvertedCone(
-			const UObject* worldContextObject,
-			FVector originPointPos, FVector originPointReferenceDir, FRotator originPointRotator, float radius, float angle, FVector originPointPosOffset,
-			int32 numSides = 12, float lifeTime = 1.f, float thickness = 0.f);
+			const UObject* WorldContextObject,
+			FVector OriginPointPos, FVector OriginPointReferenceDir, FRotator OriginPointRotator, float Radius, float Angle, FVector OriginPointPosOffset,
+			int32 NumSides = 12, float LifeTime = 1.f, float Thickness = 0.f);
 
 	/*
 	获得圆锥底部圆形上的点位置信息
@@ -53,7 +53,7 @@ public:
 	@param NumSides - 获取的点数量
 	*/
 	UFUNCTION()
-		static TArray<FVector> GetConeVertsInDegrees(FVector const& origin, FVector const& direction, float length, const float angle, int32 NumSides);
+		static TArray<FVector> GetConeVertsInDegrees(FVector const& Origin, FVector const& Direction, float Length, const float Angle, int32 NumSides);
 
 	UFUNCTION(BlueprintPure, Category = "DetectionSystem|DetectionObjectData")
 		static bool EqualsDetectionObjectData(const FDetectionObjectData& MyDataReferenceA, const FDetectionObjectData& MyDataReferenceB);
