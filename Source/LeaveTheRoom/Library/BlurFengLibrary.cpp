@@ -118,32 +118,29 @@ bool UBlurFengLibrary::RandomNameWithout(const TArray<FName> Names, const FName 
 		return !WithoutName.IsEqual(OutName);
 	}
 
-	//获取一个随机下标的Name
-	RandomName(Names, OutName, OutIndex);
-
-	//如果获取的Name和需要排除的WithoutName相等，那么往后一位取Name，直到不相同或查询了整个数组
-	if (OutName.IsEqual(WithoutName))
+	//确认数组中是否包含需要排除的Name。
+	//Check if the array contains the Name that needs to be excluded.
+	//配列に除外する必要があるNameが含まれているか確認します。
+	int withoutIndex = -1;
+	for (size_t i = 0; i < Names.Num(); i++)
 	{
-		int32 counter = 0;
-		for (size_t i = OutIndex; i < Names.Num(); i++)
+		if (Names[i].IsEqual(WithoutName))
 		{
-			//遍历了数组但没有找到不相等的Name
-			if (counter == Names.Num()) return false;
-
-			//如果Name不相等，返回这个Name
-			if (!Names[i].IsEqual(WithoutName))
-			{
-				OutName = Names[i];
-				break;
-			}
-
-			//循环到数组最后，再从0开始
-			if (i == Names.Num() - 1) i = 0;
-			counter++;
+			withoutIndex = i;
+			break;
 		}
 	}
 
-	return true;
+	if (withoutIndex >= 0) 
+	{
+		OutIndex = RandomIntegerWithout(Names.Num(), withoutIndex);
+		OutName = Names[OutIndex];
+		return true;
+	}
+	else
+	{
+		return RandomName(Names, OutName, OutIndex);
+	}
 }
 
 int32 UBlurFengLibrary::RandomIntegerWithout(int32 Max, int32 WithoutInt)

@@ -8,7 +8,11 @@
 #include "CoreMinimal.h"
 #include "DetectionSystemDynamicData.generated.h"
 
-/*探测到的对象*/
+/**
+ * 探测到的对象数据。
+ * Data of detected objects.
+ * 検出されたオブジェクトのデータ。
+ */
 USTRUCT(BlueprintType)
 struct DETECTIONSYSTEM_API FDetectionObjectData
 {
@@ -26,17 +30,25 @@ public:
 
 	UPROPERTY(BlueprintReadOnly)
 		AActor* Actor;
-
-	/*探测容器ID 对应探测条件配置Array的Index和 探测容器Array的Index*/
+	
+	/**
+	 * 数据来源于所属的DetectionContainerData。
+	 * The data comes from the associated DetectionContainerData.
+	 * データは関連するDetectionContainerDataから取得されます。
+	 */
 	UPROPERTY(BlueprintReadOnly)
 		int DetectionContainerID;
 
-	/*优先级 用于获取唯一最佳对象时进行判断 数值越高优先级越高（和FDetectionConditionItem中的优先级对应）*/
+	/**
+	 * 数据来源于所属的DetectionContainerData。
+	 * The data comes from the associated DetectionContainerData.
+	 * データは関連するDetectionContainerDataから取得されます。
+	 */
 	UPROPERTY(BlueprintReadOnly)
 		int Priority;
 };
 
-/*探测到的对象*/
+/**/
 USTRUCT(BlueprintType)
 struct DETECTIONSYSTEM_API FDetectionContainerData
 {
@@ -51,11 +63,19 @@ struct DETECTIONSYSTEM_API FDetectionContainerData
 
 public:
 
-	/*探测容器ID 对应探测条件配置Array的Index和 探测容器Array的Index*/
+	/**
+	 * 探测容器ID，和探测条件配置Array的Index和探测容器Array的Index相同。
+	 * The detected container ID corresponds to the index of the detection condition configuration array and the index of the detection container array.
+	 * 検出されたコンテナIDは、検出条件設定配列のインデックスと検出コンテナ配列のインデックスが同じです。
+	 */
 	UPROPERTY(BlueprintReadOnly)
 		int DetectionContainerID;
 
-	/*优先级 用于获取唯一最佳对象时进行判断 数值越高优先级越高（和FDetectionConditionItem中的优先级对应）*/
+	/**
+	 * 优先级，数值越高优先级越高。
+	 * Priority, the higher the value, the higher the priority.
+	 * 優先度、数値が高いほど優先度も高くなります。
+	 */
 	UPROPERTY(BlueprintReadOnly)
 		int Priority;
 };

@@ -9,7 +9,7 @@
 
 UEnvQueryTest_Angle::UEnvQueryTest_Angle(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
-	//必须添加此行 否则Test无法工作
+	//必须添加此行，否则Test无法工作。
 	ValidItemType = UEnvQueryItemType_VectorBase::StaticClass();
 
 	Origin = UEnvQueryContext_Querier::StaticClass();
@@ -54,24 +54,24 @@ void UEnvQueryTest_Angle::RunTest(FEnvQueryInstance& QueryInstance) const
 	FVector WorldDir = FVector::ForwardVector;
 	switch (OriginReferenceDir)
 	{
-	case EEnvTestAngleReferenceDir::Front:
-		WorldDir = FVector::ForwardVector;
-		break;
-	case EEnvTestAngleReferenceDir::Back:
-		WorldDir = FVector::BackwardVector;
-		break;
-	case EEnvTestAngleReferenceDir::Left:
-		WorldDir = FVector::LeftVector;
-		break;
-	case EEnvTestAngleReferenceDir::Right:
-		WorldDir = FVector::RightVector;
-		break;
-	case EEnvTestAngleReferenceDir::Up:
-		WorldDir = FVector::UpVector;
-		break;
-	case EEnvTestAngleReferenceDir::Down:
-		WorldDir = FVector::DownVector;
-		break;
+		case EEnvTestAngleReferenceDir::Front:
+			WorldDir = FVector::ForwardVector;
+			break;
+		case EEnvTestAngleReferenceDir::Back:
+			WorldDir = FVector::BackwardVector;
+			break;
+		case EEnvTestAngleReferenceDir::Left:
+			WorldDir = FVector::LeftVector;
+			break;
+		case EEnvTestAngleReferenceDir::Right:
+			WorldDir = FVector::RightVector;
+			break;
+		case EEnvTestAngleReferenceDir::Up:
+			WorldDir = FVector::UpVector;
+			break;
+		case EEnvTestAngleReferenceDir::Down:
+			WorldDir = FVector::DownVector;
+			break;
 	}
 	FVector OriginDir = ContextRotates[0].Quaternion() * WorldDir;
 
@@ -102,26 +102,26 @@ FText UEnvQueryTest_Angle::GetDescriptionTitle() const
 	FString DirDesc;
 	switch (OriginReferenceDir)
 	{
-	case EEnvTestAngleReferenceDir::Front:
-		DirDesc = TEXT(" OriginReferenceDir Front");
-		break;
-	case EEnvTestAngleReferenceDir::Back:
-		DirDesc = TEXT(" OriginReferenceDir Back");
-		break;
-	case EEnvTestAngleReferenceDir::Left:
-		DirDesc = TEXT(" OriginReferenceDir Left");
-		break;
-	case EEnvTestAngleReferenceDir::Right:
-		DirDesc = TEXT(" OriginReferenceDir Right");
-		break;
-	case EEnvTestAngleReferenceDir::Up:
-		DirDesc = TEXT(" OriginReferenceDir Up");
-		break;
-	case EEnvTestAngleReferenceDir::Down:
-		DirDesc = TEXT(" OriginReferenceDir Down");
-		break;
-	default:
-		break;
+		case EEnvTestAngleReferenceDir::Front:
+			DirDesc = TEXT(" OriginReferenceDir Front");
+			break;
+		case EEnvTestAngleReferenceDir::Back:
+			DirDesc = TEXT(" OriginReferenceDir Back");
+			break;
+		case EEnvTestAngleReferenceDir::Left:
+			DirDesc = TEXT(" OriginReferenceDir Left");
+			break;
+		case EEnvTestAngleReferenceDir::Right:
+			DirDesc = TEXT(" OriginReferenceDir Right");
+			break;
+		case EEnvTestAngleReferenceDir::Up:
+			DirDesc = TEXT(" OriginReferenceDir Up");
+			break;
+		case EEnvTestAngleReferenceDir::Down:
+			DirDesc = TEXT(" OriginReferenceDir Down");
+			break;
+		default:
+			break;
 	}
 
 	return FText::FromString(FString::Printf(TEXT("%s: %s and %s"),

@@ -11,7 +11,10 @@
 #include "AsyncDetectionTarget.generated.h"
 
 /**
- *
+ * 20241005
+ * ÒÑ·ÏÆú¡£
+ * Deprecated.
+ * ŽüÖ¹¤µ¤ì¤Þ¤·¤¿¡£
  */
 UCLASS()
 class DETECTIONSYSTEM_API UAsyncDetectionTarget : public UBlueprintAsyncActionBase

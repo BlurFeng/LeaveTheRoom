@@ -22,7 +22,9 @@ enum class EEnvTestAngleReferenceDir : uint8
 };
 
 /**
- * 
+ * 确认目标是否在一定角度范围内。
+ * Check if the target is within a certain angle range.
+ * ターゲットが特定の角度範囲内にあるか確認します。
  */
 UCLASS()
 class DETECTIONSYSTEM_API UEnvQueryTest_Angle : public UEnvQueryTest

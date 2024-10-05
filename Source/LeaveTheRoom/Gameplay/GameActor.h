@@ -10,8 +10,9 @@
 #include "GameActor.generated.h"
 
 /**
- * 这是用于游戏的基本Actor类型，游戏项目资源中所有的子类Actor都应该继承此类。除非你明确你不需要继承此类。
- * 此类用于实现为项目所有Actor服务的基本功能。不应当设计具体的业务逻辑。
+ * 用于游戏的基本Actor类型。在原生Actor和业务之间做一次隔离。次Actor实现一些非业务的通用功能。
+ * Basic Actor type used for the game. This Actor acts as an isolation layer between the native Actor and business logic. It implements some non-business generic functionalities.
+ * ゲームに使用される基本的なActorタイプです。このActorは、ネイティブActorとビジネスロジックの間の隔離層として機能します。一部の非ビジネスの汎用機能を実装します。
  */
 UCLASS()
 class LEAVETHEROOM_API AGameActor : public AActor, public IGameplayTagAssetInterface

@@ -10,8 +10,12 @@
 #include "UObject/Interface.h"
 #include "DetectionObjectInterface.generated.h"
 
-//20211012 Winhoo:接口不再必要 可以被删除
-// 之前要求被探测目标必须继承此接口才能被探测到，现在使用EQS探测。等旧项目继承了此接口的内容不再需要时，一起删除此脚本
+/**
+ * 20241005
+ * 已废弃。
+ * Deprecated.
+ * 廃止されました。
+ */
 UINTERFACE(Blueprintable, MinimalAPI)
 class UDetectionObjectInterface : public UInterface
 {

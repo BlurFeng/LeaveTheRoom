@@ -17,7 +17,11 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FMDDetectionAction);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FMDBestTargetChange, bool, HaveTarget, FDetectionObjectData, DetectionObjectData);
 
-/*探测容器，和探测条件配置条目对应，用于存储探测条件配置，对目标进行筛选并存储*/
+/**
+ * 探测容器，用于存储探测条件配置，对目标进行筛选并存储。
+ * Detection container, used to store detection condition configurations, filter targets, and store results.
+ * 検出コンテナ。検出条件設定を保存し、ターゲットをフィルタリングして結果を保存するために使用されます。
+ */
 UCLASS(ClassGroup = (DetectionSystem))
 class DETECTIONSYSTEM_API UDetectionContainer : public UObject
 {
@@ -25,22 +29,15 @@ class DETECTIONSYSTEM_API UDetectionContainer : public UObject
 
 public:
 
-	/*探测容器ID 对应探测条件配置Array的Index和 探测容器Array的Index*/
 	UPROPERTY(BlueprintReadOnly, Category = "DetectionSystem|DetectionContainer")
 		int DetectionContainerID;
 
-	/*探测条件配置*/
 	UPROPERTY(BlueprintReadOnly, Category = "DetectionSystem|DetectionContainer")
 		FDetectionConditionItem DetectionConditionItem;
 
-	/*探测容器参与的探测目标集合 在初始化时加入 数量和探测目标条件中的类型数量相同*/
-	UPROPERTY()
-		TArray<int> DetectionTargetGatherIndexs;
-
-	
 
 	/**
-	 初始化
+	 * 初始化
 	 * @param newOwnerActor 所有者Actor
 	 * @param newDetectionContainerID 所属探测容器ID
 	 * @param newDetectionConditionItem 探测条件配置项目
@@ -52,17 +49,11 @@ public:
 	UFUNCTION()
 		void OnDetection();
 
-	/**
-	 获取最佳目标
-	 * @param outDetectionActor - 探测到的目标Actor
-	*/
+	/*获取最佳目标*/
 	UFUNCTION(BlueprintCallable, Category = "DetectionSystem|DetectionContainer")
 		bool GetTarget(AActor*& OutDetectionActor);
 
-	/**
-	 获取最佳目标组
-	 * @param outDetectionActors - 探测到的目标Actor组
-	*/
+	/*获取最佳目标组*/
 	UFUNCTION(BlueprintCallable, Category = "DetectionSystem|DetectionContainer")
 		bool GetTargets(TArray<AActor*>& OutDetectionActors);
 
@@ -70,15 +61,11 @@ public:
 	UFUNCTION()
 		int GetTargetScore(int ItemIndex);
 
-	/**
-	 * 清空所有目标
-	*/
+	/*清空所有目标*/
 	UFUNCTION()
 		void ClearAllTarget();
 
-	/**
-	 * @brief 当EQS运行完成时
-	*/
+	/*当EQS运行完成时*/
 	UFUNCTION()
 		void OnQueryFinished(UEnvQueryInstanceBlueprintWrapper* QueryInstance, EEnvQueryStatus::Type QueryStatus);
 
@@ -112,7 +99,11 @@ private:
 };
 
 
-/*探测系统功能组件 添加到Actor以获得探测功能*/
+/**
+ * 探测系统功能组件，添加到Actor以获得探测功能。
+ * Detection system functional component, added to an Actor to enable detection functionality.
+ * 探知システム機能コンポーネント。アクターに追加して探知機能を付与します。
+ */
 UCLASS(Blueprintable, ClassGroup=(DetectionSystem), meta=(BlueprintSpawnableComponent))
 class DETECTIONSYSTEM_API UDetectionSystemComponentBase : public UActorComponent
 {
@@ -148,9 +139,7 @@ public:
 	UPROPERTY(BlueprintCallable, BlueprintAssignable, Category = "DetectionSystem|Default")
 		FMDDetectionAction OnContinuousDetectionEnd;
 
-	/**
-	 * 当最佳目标改变时
-	 */
+	/*当最佳目标改变时*/
 	UPROPERTY(BlueprintCallable, BlueprintAssignable, Category = "DetectionSystem|Default")
 		FMDBestTargetChange OnBestTargetChange;
 
@@ -158,11 +147,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DetectionSystem|Default")
 		bool EnableDebug;
 
-	/*
-	初始化
-	@param newDetectionConditionConfig - 探测条件配置文件
-	@param openContinuousDetection - 是否启动持续探测
-	@return 是否成功执行初始化
+	/**
+	 * 初始化
+	 * @param newDetectionConditionConfig - 探测条件配置文件
+	 * @param openContinuousDetection - 是否启动持续探测
+	 * @return 是否成功执行初始化
 	*/
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "DetectionSystem|Default")
 		bool Init(FDetectionConditionConfig NewDetectionConditionConfig, bool OpenContinuousDetection = true);
@@ -185,7 +174,7 @@ public:
 	bool GetBestTargetByPriority(AActor*& OutDetectionActor, FDetectionContainerData& OutContainerData);
 
 	/**
-	 获取目标 某个探测容器的目标
+	 * 获取目标 某个探测容器的目标
 	 * @param detectionContainerIndex - 探测容器下标 对应探测条件Datatable中的顺序
 	 * @param outDetectionActor - 探测到的目标Actor
 	 * @return 是否有目标
@@ -194,7 +183,7 @@ public:
 		bool GetTarget(int DetectionContainerIndex, AActor*& OutDetectionActor, FDetectionContainerData& OutContainerData);
 
 	/**
-	 获取目标组 某个探测容器的目标
+	 * 获取目标组 某个探测容器的目标
 	 * @param detectionContainerIndex - 探测容器下标 对应探测条件Datatable中的顺序
 	 * @param outDetectionActors - 探测到的目标Actor组
 	 * @return 是否有目标
@@ -203,7 +192,7 @@ public:
 		bool GetTargets(int DetectionContainerIndex, TArray<AActor*>& OutDetectionActors, FDetectionContainerData& OutContainerData);
 
 	/**
-	 获取所有有探测到目标的容器
+	 * 获取所有有探测到目标的容器
 	 * @param outDetectionContainers - 探测到的目标Actor组
 	 * @param sortType - 对容器的排序方式 0=按最佳目标分数排序
 	 * @return 是否有目标

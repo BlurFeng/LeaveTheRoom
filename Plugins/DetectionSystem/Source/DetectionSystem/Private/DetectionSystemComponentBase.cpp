@@ -276,7 +276,9 @@ void UDetectionSystemComponentBase::RefreshContinuousDetection()
 	bool GetTarget = false;
 	FDetectionObjectData BestTargetCached = FDetectionObjectData(BestTargetByPriority);
 
-	//遍历探测目标集合
+	//---- 遍历探测目标集合 ----//
+	//---- Iterate through the detected target collection ----//
+	//---- 検出されたターゲットコレクションを反復処理 ----//
 	for (auto& DetectionContainer : DetectionContainers)
 	{
 		if (DetectionContainer == nullptr) continue;
@@ -381,7 +383,9 @@ void UDetectionContainer::OnDetection()
 	TargetActors.Empty();
 	IsHaveTargetObject = false;
 	
-	// -- 运行EQS并收集数据
+	//---- 运行EQS并收集数据 ----//
+	//---- Run EQS and collect data ----//
+	//---- EQSを実行してデータを収集 ----//
 
 	//运行EQS
 	if (EnvQueryInstance == nullptr)
@@ -401,7 +405,9 @@ void UDetectionContainer::OnDetection()
 		return;
 	}
 
-	// -- 更新信息
+	//---- 更新信息 ----//
+	//---- Update information ----//
+	//---- 情報を更新 ----//
 
 	//获取所有探测到的目标
 	//Tips 实际上直接获取是获取不到此次运行EQS所获得的数据的 而是获取到之前运行完成后的缓存 因为时持续探测所以直接写在这没什么问题

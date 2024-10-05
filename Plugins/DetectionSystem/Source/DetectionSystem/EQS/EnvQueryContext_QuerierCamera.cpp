@@ -19,7 +19,9 @@ void UEnvQueryContext_QuerierCamera::ProvideContext(FEnvQueryInstance& QueryInst
 	
 	APlayerController* controller;
 
-	//通过pawn获取PlayerController
+	//通过pawn获取PlayerController。
+	//Get the PlayerController through the pawn.
+	//ポーンを通じてPlayerControllerを取得します。
 	APawn* pawn = Cast<APawn>(QueryOwner);
 	if (pawn != nullptr)
 	{
@@ -28,7 +30,9 @@ void UEnvQueryContext_QuerierCamera::ProvideContext(FEnvQueryInstance& QueryInst
 	else
 		controller = Cast<APlayerController>(QueryOwner);
 
-	//通过PlayerController获取Camera
+	//通过PlayerController获取Camera。
+	//Get the Camera through the PlayerController.
+	//PlayerControllerを通じてカメラを取得します。
 	if (controller != nullptr)
 	{
 		UEnvQueryItemType_Actor::SetContextHelper(ContextData, controller->PlayerCameraManager);

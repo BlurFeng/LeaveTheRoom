@@ -38,7 +38,9 @@ void UEnvQueryTest_ScreenRange::RunTest(FEnvQueryInstance& QueryInstance) const
 	if (gameView == nullptr) return;
 	
 
-	//----获取基础数据----//
+	//---- 获取基础数据 ----//
+	//---- Get the base data ----//
+	//---- 基本データを取得します ----//
 
 	//获取筛选设定的最高和最低分
 	FloatValueMin.BindData(QueryOwner, QueryInstance.QueryID);
@@ -145,7 +147,9 @@ void UEnvQueryTest_ScreenRange::RunTest(FEnvQueryInstance& QueryInstance) const
 	}
 #endif
 
-	//----对所有目标进行测试----//
+	//---- 对所有目标进行测试 ----//
+	//---- Test all targets ----//
+	//---- すべてのターゲットをテストします ----//
 	for (FEnvQueryInstance::ItemIterator It(this, QueryInstance); It; ++It)
 	{
 		AActor* ItemActor = GetItemActor(QueryInstance, It.GetIndex());//获取目标Actor
@@ -153,7 +157,9 @@ void UEnvQueryTest_ScreenRange::RunTest(FEnvQueryInstance& QueryInstance) const
 
 		FBox itemBox = GetBox(ItemActor);
 
-		//----距离测试----//
+		//---- 距离测试 ----//
+		//---- Distance test ----//
+		//---- 距離テスト ----//
 		bool pass_Dis = true;
 		float score_Dis = 1.f;
 		if (bOpenDistanceTest)
@@ -185,7 +191,9 @@ void UEnvQueryTest_ScreenRange::RunTest(FEnvQueryInstance& QueryInstance) const
 
 		if (!pass_Dis) continue;//未通过距离测试
 
-		//----获取目标世界坐标位置----//
+		//---- 获取目标世界坐标位置 ----//
+		//---- Get target world coordinate position ----//
+		//---- ターゲットのワールド座標位置を取得 ----//
 		FVector itemLocation;
 		bool getItemLocationSucceed = false;
 
@@ -213,7 +221,9 @@ void UEnvQueryTest_ScreenRange::RunTest(FEnvQueryInstance& QueryInstance) const
 			getItemLocationSucceed = true;
 		}
 
-		//----屏幕范围测试----//
+		//---- 屏幕范围测试 ----//
+		//---- Screen range test ----//
+		//---- スクリーン範囲テスト ----//
 		bool bIsOnScreen;
 		FVector2D itemPos = GetScreenPositionByWorldLocation(GetWorld(), playerController, itemLocation, bIsOnScreen);
 		bool pass_ScreenRange = true;
@@ -242,7 +252,9 @@ void UEnvQueryTest_ScreenRange::RunTest(FEnvQueryInstance& QueryInstance) const
 		if(!pass_ScreenRange) continue;//未通过屏幕范围测试
 
 
-		//----计算最后得分----//
+		//---- 计算最后得分 ----//
+		//---- Calculate final score ----//
+		//---- 最終スコアを計算 ----//
 		float score;
 		if (bOpenDistanceTest)
 		{
@@ -255,7 +267,9 @@ void UEnvQueryTest_ScreenRange::RunTest(FEnvQueryInstance& QueryInstance) const
 			score = score_ScreenRange;
 		
 
-		//----确认分数是否被筛除----//
+		//---- 确认分数是否被筛除 ----//
+		//---- Confirm if the score is filtered out ----//
+		//---- スコアが除外されているか確認 ----//
 		bool isFilter = TestPurpose == EEnvTestPurpose::Type::Filter || TestPurpose == EEnvTestPurpose::Type::FilterAndScore;
 		bool isInFilterRange = true;
 		if (isFilter)
@@ -283,7 +297,9 @@ void UEnvQueryTest_ScreenRange::RunTest(FEnvQueryInstance& QueryInstance) const
 		}
 #endif
 
-		//----进行遮挡检查----//
+		//---- 进行遮挡检查 ----//
+		//---- Perform obstruction check ----//
+		//---- 障害物チェックを行う ----//
 		if (isInFilterRange && OcclusionExamineMode != EEnvTestScreenRangeOcclusionExamineMode::None)
 		{
 			//traceEnd默认为itemLocation，为包围盒上的点，我们能保证Tarce对准ItemBox，但不能保证射线一定能击打到Item目标
@@ -450,7 +466,9 @@ void UEnvQueryTest_ScreenRange::RunTest(FEnvQueryInstance& QueryInstance) const
 			}
 		}
 
-		//打分
+		//---- 打分 ----//
+		//---- Scoring ----//
+		//---- スコアリング ----//
 		It.SetScore(TestPurpose, FilterType, score, MinThresholdValue, MaxThresholdValue);
 
 #if !UE_BUILD_SHIPPING
