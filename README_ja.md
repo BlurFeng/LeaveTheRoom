@@ -36,7 +36,7 @@ Unreal Engine 5.4.4を使用し、Gameplayフレームワークに基づいて�
 4. 主要なゲームプレイクラス。InteractionActor基底クラス、サブクラスのTeleportDoor、ExitDoor、ScoreItemを制作。
 5. DetectionSystem用の設定ファイルとEQSアセットを作成。
 6. 部屋の内容は設定ファイルを元に自動生成されます。TeleportDoor、ExitDoor、ScoreItem、AirWallBoxが含まれ、設定ファイルにより柔軟な構成が可能。
-7. UMGを用いてメインUIと操作案内のUIを構築。
+7. UMGを用いてメインUIと操作案内のUIを構築。また、UI用のマテリアルの開発も行います。
 
 ## 【その他】
 ゲームのリソースはUEマーケットプレイスから取得しています。

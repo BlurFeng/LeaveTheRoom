@@ -36,7 +36,7 @@ WSAD或方向键：移动\
 4. 玩法内容核心类InteractionActor基类，及其子类TeleportDoor、ExitDoor和ScoreItem。
 5. 根据业务需求制作DetectionSystem使用的配置表和EQS资产。
 6. 房间内容根据配置表自动化生成。包括TeleportDoor、ExitDoor、ScoreItem和AirWallBox。通过配置表将业务功能可配置化，易于业务内容的生产。
-7. UI：使用UMG搭建项目的主界面UI及操作提示UI。
+7. UI：使用UMG搭建项目的主界面UI及操作提示UI。以及UI用的Material的开发。
 
 ## 【其他】
 游戏资源来自UE商店。

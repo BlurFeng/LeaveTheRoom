@@ -36,7 +36,7 @@ Developed using Unreal Engine 5.4.4, this project is built upon the Gameplay fra
 4. Created core gameplay classes, such as the InteractionActor base class and its subclasses, TeleportDoor, ExitDoor, and ScoreItem.
 5. Developed configuration files and EQS assets for the DetectionSystem as required by the business logic.
 6. Rooms are automatically generated based on configuration files, including TeleportDoor, ExitDoor, ScoreItem, and AirWallBox. The system allows flexible configuration for easy content production.
-7. UI: Built the main project UI and control prompt UI using UMG.
+7. UI: Built the main project UI and control prompt UI using UMG.Additionally, I develop materials for the UI.
 
 ## 【Others】
 Game assets are sourced from the UE Marketplace.
