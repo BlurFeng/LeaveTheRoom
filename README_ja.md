@@ -29,7 +29,7 @@ Unreal Engine 5.4.4を使用し、Gameplayフレームワークに基づいて�
 ### プロジェクトのアセットおよびブループリント
 #### プラグイン
 1. DetectionSystem：ブループリントでデバッグ用UMGと、単体機能のデモシーンを提供。
-#### 项目内容
+#### プラグインとブループリント
 1. Gameplayフレームワークに基づき、GameMode、GameState、PlayerController、Characterにビジネスロジックを分離。
 2. Enhanced Inputを用いてプレイヤー入力機能を制作。
 3. 状態に応じたキャラクターのアニメーション状態機を作成。
