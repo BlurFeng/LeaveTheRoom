@@ -39,6 +39,7 @@ Developed using Unreal Engine 5.4.4, this project is built upon the Gameplay fra
 7. UI: Built the main project UI and control prompt UI using UMG.Additionally, I develop materials for the UI.
 
 ## 【Others】
+A showcase project with an actual development time of ten days.
 Game assets are sourced from the UE Marketplace.
 
 ## 【TODO】
