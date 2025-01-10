@@ -26,5 +26,5 @@ void AGameActor::Tick(float DeltaTime)
 
 void AGameActor::GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const
 {
-	TagContainer.AppendTags(GameplayTagContainer);
+	TagContainer = GameplayTagContainer;
 }
